@@ -511,8 +511,19 @@
       closeModal(event, 'red-flag-modal');
     };
 
+    // Function to filter projects based on search input
+    function filterProjects() {
+      const searchInput = document.getElementById('search-input').value.toLowerCase();
+      const filteredProjects = projects.filter(project => 
+        project.name.toLowerCase().includes(searchInput) || 
+        project.location.toLowerCase().includes(searchInput)
+      );
+      populateGallery(filteredProjects);
+    }
+
     // Initial population of the gallery
     populateGallery();
   </script>
+
 </body>
 </html>
