@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Dashboard</title>
-  <link rel="icon" href="logo.svg" type="image/png">
   <style>
     /* Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,7 +65,7 @@
     .gallery-container {
       display: grid; 
       gap: 1.5em; 
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Adjusted for sleeker layout */
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       width: 90%; 
       max-width: 1200px;
       justify-content: center;
@@ -120,17 +119,17 @@
     }
 
     /* Timeline and Gallery Modal styling */
-    #timeline-modal, #gallery-modal, #image-view-modal {
+    #timeline-modal, #gallery-modal, #image-view-modal, #red-flag-modal {
       display: none;
       position: fixed;
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 100%; 
-      background: rgba(0, 0, 0, 0.6); 
-      justify-content: center; 
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
       align-items: center;
-      z-index: 2;
+      z-index: 3;
     }
     .modal-content {
       background-color: white; 
@@ -143,6 +142,7 @@
       max-height: 90vh;
       position: relative;
       animation: fadeIn 0.3s ease;
+      text-align: center;
     }
     .close-btn {
       position: absolute;
@@ -160,28 +160,49 @@
       background-color: #555;
     }
 
-    /* Fade-in animation */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* Red Flag Button Styling */
+    .raise-flag-btn {
+      background-color: #dc3545;
+      color: white;
+      padding: 0.8em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 2em;
+    }
+    .raise-flag-btn:hover {
+      background-color: #a71d2a;
     }
 
-    /* Detailed Image View Modal styling */
-    #image-view-modal .modal-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    /* Form Styling */
+    #red-flag-form label {
+      display: block;
+      font-weight: bold;
+      margin: 1em 0 0.5em;
     }
-    #image-view-modal img {
-      max-width: 90%;
-      max-height: 80vh;
-      border-radius: 12px;
-      margin-bottom: 0.5em;
+    #red-flag-form textarea,
+    #red-flag-form select {
+      width: 100%;
+      padding: 0.8em;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 1em;
     }
-    #image-view-modal .image-date {
-      font-size: 0.9em;
-      color: #666;
+    .submit-btn {
+      background-color: #000;
+      color: white;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .submit-btn:hover {
+      background-color: #333;
     }
 
     /* Sleek Vertical Timeline */
@@ -219,7 +240,7 @@
     .step-title { font-weight: bold; }
     .step-date { font-size: 0.85em; color: #aaa; }
 
-    /* Larger square image gallery within modal */
+    /* Image Gallery Styling */
     .image-gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -263,6 +284,24 @@
       opacity: 1;
     }
 
+    /* Detailed Image View */
+    #image-view-modal .modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    #image-view-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+      margin-bottom: 0.5em;
+    }
+    #image-view-modal .image-date {
+      font-size: 0.9em;
+      color: #666;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .image-gallery { grid-template-columns: repeat(2, 1fr); }
@@ -301,9 +340,12 @@
       <div id="vertical-timeline" class="vertical-timeline">
         <!-- Timeline events will be dynamically added here -->
       </div>
+      <!-- Red Flag Section below timeline -->
+      <div id="red-flag-section">
+        <button class="raise-flag-btn" onclick="openRedFlagModal()">Raise Red Flag</button>
+      </div>
     </div>
   </div>
-  
 
   <!-- Gallery Modal -->
   <div id="gallery-modal" onclick="closeModal(event, 'gallery-modal')">
@@ -325,8 +367,31 @@
     </div>
   </div>
 
+  <!-- Red Flag Modal -->
+  <div id="red-flag-modal" class="modal" onclick="closeModal(event, 'red-flag-modal')">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeModal(event, 'red-flag-modal')">X</button>
+      <h2>Raise a Concern</h2>
+      <p>Tell us about your concern with the project’s progress:</p>
+
+      <form id="red-flag-form">
+        <label for="issue-description">Describe the Issue:</label>
+        <textarea id="issue-description" rows="4" placeholder="Provide specific details..." required></textarea>
+
+        <label for="issue-type">Select Issue Type:</label>
+        <select id="issue-type">
+          <option value="delay">Delay</option>
+          <option value="quality">Quality Issue</option>
+          <option value="communication">Communication Issue</option>
+          <option value="other">Other</option>
+        </select>
+
+        <button type="submit" class="submit-btn">Submit Concern</button>
+      </form>
+    </div>
+  </div>
+
   <script>
-    // Sample project data with 10 images and sample timeline events
     const projects = [
       { id: 1, name: 'Project Alpha', location: 'Dar Es Salaam', startDate: '2023-01-15', events: [
         { description: 'Project Initiation', date: '2023-01-15', status: 'completed' },
@@ -363,7 +428,6 @@
         { description: 'Launch', date: '2023-04-10', status: 'pending' },
         { description: 'Post-launch Support', date: '2023-04-15', status: 'pending' }
       ], images: Array(10).fill({ url: 'a.jpg', uploadedAt: '2023-03-05' }) }
-      
     ];
 
     function populateGallery(filteredProjects = projects) {
@@ -433,16 +497,19 @@
       document.getElementById('image-view-modal').style.display = 'flex';
     }
 
+    function openRedFlagModal() {
+      document.getElementById('red-flag-modal').style.display = 'flex';
+    }
+
     function closeModal(event, modalId) {
       document.getElementById(modalId).style.display = 'none';
     }
 
-    // Search functionality
-    function filterProjects() {
-      const searchValue = document.getElementById('search-input').value.toLowerCase();
-      const filteredProjects = projects.filter(project => project.name.toLowerCase().includes(searchValue));
-      populateGallery(filteredProjects);
-    }
+    document.getElementById('red-flag-form').onsubmit = function(event) {
+      event.preventDefault();
+      alert('Thank you! Your concern has been submitted.');
+      closeModal(event, 'red-flag-modal');
+    };
 
     // Initial population of the gallery
     populateGallery();
