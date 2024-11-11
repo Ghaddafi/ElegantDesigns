@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up & Login Form</title>
   <link rel="icon" href="logo.svg" type="image/png">
+  
   <style>
     /* Reset */
     * {
@@ -164,21 +165,21 @@
       if (email === 'elegant@gmail.com' && password === '12345') {
         // Redirect to dashboard.html if credentials are correct
         window.location.href = 'dashboard.html'; 
-        return false; // Prevent form submission after redirect
+        return false; // Prevent form submission after redirect  
       } else {
         // Show error message if credentials are incorrect
-        message.textContent = 'Invalid email or password. Please try again.';
-        return false; // Prevent form submission
+        message.textContent = 'Invalid email or password. Please try again.';  
+        return false; // Prevent form submission 
       }
     }
 
     // Validate Sign Up Form
     function validateSignup() {
-      const username = document.getElementById('signup-username').value;
-      const email = document.getElementById('signup-email').value;
-      const password = document.getElementById('signup-password').value;
-      const confirmPassword = document.getElementById('signup-confirm-password').value;
-      const message = document.getElementById('signup-message');
+      const username = document.getElementById('signup-username').value;  
+      const email = document.getElementById('signup-email').value; 
+      const password = document.getElementById('signup-password').value; 
+      const confirmPassword = document.getElementById('signup-confirm-password').value; 
+      const message = document.getElementById('signup-message'); 
 
       message.textContent = '';
 
@@ -192,8 +193,8 @@
         return false;
       }
 
-      return true;
+      return true;  
     }
-  </script>
+  </script> 
 </body>
-</html>
+</html> 
