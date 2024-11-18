@@ -38,7 +38,6 @@ h1 {
 }
 
 
-        
 
         /* Progress Bar */
         .progress-bar-container { background: #e9ecef; height: 10px; border-radius: 5px; margin-bottom: 20px; position: relative; }
@@ -153,7 +152,7 @@ h1 {
         <!-- Form Steps -->
         <div id="step1" class="form-step active">
             <h3>What’s your name?</h3>
-            <input type="text" id="name" placeholder="Enter your name" oninput="updateState('name', this.value)">
+            <input type="text" id="name" placeholder="Let us know how we should call you" oninput="updateState('name', this.value)">
             <p class="error" id="error-name">Please enter your name.</p>
             <div class="button-container">
                 <button onclick="nextStep(1)">Next</button>
@@ -161,8 +160,8 @@ h1 {
         </div>
 
         <div id="step2" class="form-step">
-            <h3>What’s your email?</h3>
-            <input type="email" id="email" placeholder="Enter your email" oninput="updateState('email', this.value)">
+            <h3>Type your email? </h3>
+            <input type="email" id="email" placeholder="This is how we shall update you on the status of your project" oninput="updateState('email', this.value)">
             <p class="error" id="error-email">Please enter a valid email.</p>
             <div class="button-container">
                 <button onclick="prevStep(2)">Back</button>
@@ -172,7 +171,7 @@ h1 {
 
         <div id="step3" class="form-step">
             <h3>What’s your phone number?</h3>
-            <input type="tel" id="phone" placeholder="Enter your phone number" oninput="updateState('phone', this.value)">
+            <input type="tel" id="phone" placeholder="We'll use this to speed up communications" oninput="updateState('phone', this.value)">
             <p class="error" id="error-phone">Please enter your phone number.</p>
             <div class="button-container">
                 <button onclick="prevStep(3)">Back</button>
@@ -181,8 +180,8 @@ h1 {
         </div>
 
         <div id="step4" class="form-step">
-            <h3>Where are you located?</h3>
-            <input type="text" id="location" placeholder="Enter your location" oninput="updateState('location', this.value)">
+            <h3>What do you plan to build? </h3>
+            <input type="text" id="location" placeholder="Tell us the nature of your project" oninput="updateState('location', this.value)">
             <p class="error" id="error-location">Please enter your location.</p>
             <div class="button-container">
                 <button onclick="prevStep(4)">Back</button>
@@ -191,9 +190,9 @@ h1 {
         </div>
 
         <div id="step5" class="form-step">
-            <h3>What’s your budget?</h3>
-            <input type="text" id="budget" placeholder="Enter your budget" oninput="updateState('budget', this.value)">
-            <p class="error" id="error-budget">Please enter your budget.</p>
+            <h3> Do you know where you will build your project? </h3>
+            <input type="text" id="budget" placeholder=" If not, no worries. We can guide you" oninput="updateState('budget', this.value)">
+            <p class="error" id="error-budget">Please enter location of project.</p>
             <div class="button-container">
                 <button onclick="prevStep(5)">Back</button>
                 <button onclick="nextStep(5)">Next</button>
@@ -201,9 +200,9 @@ h1 {
         </div>
 
         <div id="step6" class="form-step">
-            <h3>What type of project are you interested in?</h3>
-            <input type="text" id="projectType" placeholder="Enter the type of project" oninput="updateState('projectType', this.value)">
-            <p class="error" id="error-projectType">Please enter your project type.</p>
+            <h3>Would you like us to offer pre-build services, or build the entire project for you? </h3>
+            <input type="text" id="projectType" placeholder=" let us know how you would like to work with us" oninput="updateState('projectType', this.value)">
+            <p class="error" id="error-projectType">Please tell us how we can be of value.</p>
             <div class="button-container">
                 <button onclick="prevStep(6)">Back</button>
                 <button onclick="nextStep(6)">Next</button>
@@ -212,7 +211,7 @@ h1 {
 
         <div id="step7" class="form-step">
             <h3>What’s your project timeline?</h3>
-            <input type="text" id="timeline" placeholder="Enter your project timeline" oninput="updateState('timeline', this.value)">
+            <input type="text" id="timeline" placeholder="Tell us when you would like to start and finish" oninput="updateState('timeline', this.value)">
             <p class="error" id="error-timeline">Please enter your timeline.</p>
             <div class="button-container">
                 <button onclick="prevStep(7)">Back</button>
@@ -221,11 +220,11 @@ h1 {
         </div>
 
         <div id="step8" class="form-step">
-            <h3>Would you like to finance through a bank?</h3>
+            <h3>Would you like to finance this project through our partner banks?</h3>
             <select id="financing" onchange="updateState('financing', this.value); handleFinancingChange();">
                 <option value="">Select an option</option>
                 <option value="self-finance">Self-finance</option>
-                <option value="co-finance">Co-finance with a bank</option>
+                <option value="co-finance">Co-finance with a partner bank</option>
             </select>
             <p class="error" id="error-financing">Please select a financing option.</p>
 
@@ -250,23 +249,23 @@ h1 {
             <h2>Our Partner Banks</h2>
             <div class="partner-banks-wrapper">
                 <div class="bank-info">
-                    <img src="logo.png" alt="Bank 1">
-                    <p>Bank of America</p>
+                    <img src="crdb.webp" alt="Bank 1">
+                    <p>CRDB Bank PLC</p>
                     <p class="rate">Interest Rate: 3.5%</p>
                 </div>
                 <div class="bank-info">
-                    <img src="logo.png" alt="Bank 2">
-                    <p>Chase Bank</p>
+                    <img src="nmb.jpg" alt="Bank 2">
+                    <p> NMB Bank</p>
                     <p class="rate">Interest Rate: 3.8%</p>
                 </div>
                 <div class="bank-info">
-                    <img src="logo.png" alt="Bank 3">
-                    <p>Citibank</p>
+                    <img src="absa.png" alt="Bank 3">
+                    <p> ABSA </p>
                     <p class="rate">Interest Rate: 4.0%</p>
                 </div>
                 <div class="bank-info">
-                    <img src="logo.png" alt="Bank 4">
-                    <p>Wells Fargo</p>
+                    <img src="nbc.jpeg" alt="Bank 4">
+                    <p> NBC Bank </p>
                     <p class="rate">Interest Rate: 3.6%</p>
                 </div>
             </div>
