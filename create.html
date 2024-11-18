@@ -7,9 +7,38 @@
     <style>
         /* General Styles */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { width: 100%; max-width: 600px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); padding: 20px; }
-        h1 { text-align: center; margin-bottom: 20px; color: black; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('berna.jpg'); /* Add the background image */
+            background-size: cover; /* Ensure the image covers the entire page */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Ensure the image does not repeat */
+            background-attachment: fixed; /* Optional: Keeps the background fixed during scrolling */
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: black;
+}
+
+
+        
 
         /* Progress Bar */
         .progress-bar-container { background: #e9ecef; height: 10px; border-radius: 5px; margin-bottom: 20px; position: relative; }
