@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Track Your Request </title>
-  <link rel="icon" href="logo.svg" type="image/png">
+  <title> Track Your Application </title>
   <style>
     /* Reset and Base Styling */
     * {
@@ -14,8 +13,8 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     body {
-      background: linear-gradient(to bottom, #eaeef1, #f5f5f5); /* Subtle gradient */
-      color: #333; /* Dark text for contrast */
+      background: linear-gradient(to bottom, #eaeef1, #f5f5f5);
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -39,11 +38,11 @@
       margin-top: 20px;
     }
     .tracker-header h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       font-weight: 700;
       letter-spacing: 1px;
       color: #333;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle depth */
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Search Bar */
@@ -123,9 +122,17 @@
       width: 100%;
       margin-bottom: 40px;
       position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      cursor: pointer;
     }
     .timeline-item:nth-child(even) {
       flex-direction: row-reverse;
+    }
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* Timeline Icon */
@@ -142,9 +149,13 @@
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
     .timeline-item.completed .timeline-icon {
-      border-color: #333;
-      background: #333;
-      transform: scale(1.1); /* Emphasize completed icons */
+      border-color: #f9c967;
+      background: #fff;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="%23f9c967" viewBox="0 0 24 24"><path d="M20.285 6.69l-11.04 11.04c-.583.584-1.536.584-2.121 0l-4.243-4.242c-.585-.586-.585-1.538 0-2.123s1.536-.586 2.122 0l3.183 3.183 10.101-10.1c.586-.586 1.538-.586 2.122 0s.586 1.538 0 2.122z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 50%;
+      transform: scale(1.1);
     }
 
     /* Timeline Content */
@@ -160,7 +171,6 @@
     .timeline-item:nth-child(even) .timeline-content {
       text-align: right;
     }
-
     .timeline-content h3 {
       font-size: 1.4rem;
       font-weight: bold;
@@ -170,16 +180,14 @@
     .timeline-content p {
       font-size: 0.9rem;
       color: #555;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
     }
-
-    /* Hover Effects */
-    .timeline-content:hover {
-      transform: translateY(-3px);
-      background-color: #f9f9f9;
-    }
-    .timeline-icon:hover {
-      transform: scale(1.2);
-      border-color: #f9c967; /* Light gold hover effect */
+    .timeline-content.expanded p {
+      max-height: 200px;
+      opacity: 1;
     }
 
     /* Responsive Design */
@@ -201,7 +209,7 @@
 </head>
 <body>
   <div class="tracker-header">
-    <h1>Track Your Request</h1>
+    <h1>Application Tracker</h1>
   </div>
   <div class="search-bar">
     <input type="text" id="trackingID" placeholder="Enter Tracking ID">
@@ -210,18 +218,15 @@
   <div class="timeline" id="timeline"></div>
 
   <script>
-    // Mock stages data
     const stages = [
-      { stage: "Submitted", timestamp: "2024-11-15 10:00", completed: true },
-      { stage: "In Review", timestamp: "2024-11-16 14:30", completed: true },
-      { stage: "Approved", timestamp: "2024-11-17 18:00", completed: false },
-      { stage: "Finalized", timestamp: "", completed: false }
+      { stage: "Submitted", timestamp: "2024-11-15 10:00", completed: true, details: "Your application has been successfully submitted." },
+      { stage: "In Review", timestamp: "2024-11-16 14:30", completed: true, details: "Our team is currently reviewing your application." },
+      { stage: "Approved", timestamp: "2024-11-17 18:00", completed: false, details: "Your application has been approved." },
+      { stage: "Finalized", timestamp: "", completed: false, details: "Your application process is now finalized." }
     ];
 
     function loadTimeline() {
-      // Add search-active class to move elements
       document.body.classList.add("search-active");
-
       const timeline = document.getElementById("timeline");
       timeline.innerHTML = ""; // Clear previous results
 
@@ -235,10 +240,19 @@
           <div class="timeline-content">
             <h3>${item.stage}</h3>
             <p>${item.timestamp || "Pending"}</p>
+            <p>${item.details}</p>
           </div>
         `;
 
         timeline.appendChild(timelineItem);
+
+        setTimeout(() => timelineItem.classList.add("visible"), index * 200);
+
+        // Expand/Collapse on click
+        timelineItem.addEventListener("click", () => {
+          const content = timelineItem.querySelector(".timeline-content");
+          content.classList.toggle("expanded");
+        });
       });
     }
   </script>
