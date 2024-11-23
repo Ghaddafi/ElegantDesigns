@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> View Your Dashboard</title>
-
-  <link rel="icon" href="logo.svg" type="image/png">
+  <title>Dashboard</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <style>
-    /* Base reset */
+    /* Base Reset */
     * {
       margin: 0;
       padding: 0;
@@ -16,16 +15,17 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      color: white;
-      height: 100vh;
-      overflow: hidden;
+      color: #333;
+      background-color: #f8f9fa;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    /* Background Container with Blurred Image */
+    /* Background */
     .background-container {
       position: fixed;
       top: 0;
@@ -34,206 +34,204 @@
       height: 100%;
       background: url('a.jpg') no-repeat center center fixed;
       background-size: cover;
-      filter: blur(8px); /* Blur effect */
-      z-index: -1; /* Place behind other elements */
+      filter: blur(15px);
+      z-index: -1;
     }
 
-    /* Header Bar with Modern Styling */
+    /* Header */
     .header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 60px;
-      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+      height: 70px;
+      background: rgba(255, 255, 255, 0.85);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
-      backdrop-filter: blur(10px); /* Subtle blur for the background */
-      z-index: 1;
+      padding: 0 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      backdrop-filter: blur(10px);
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
     }
 
-    /* Header Title Styling */
     .header-title {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #333; /* Dark color for contrast */
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+      letter-spacing: 0.5px;
     }
 
-    /* Stylish Logout Button */
     .logout-button {
-      padding: 8px 16px;
-      background-color: black; /* Black background */
-      color: white; /* White text */
-      font-weight: bold;
-      border: none;
-      border-radius: 20px; /* Rounded for a pill-like shape */
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .logout-button:hover {
+      padding: 10px 25px;
       background-color: #333;
-      transform: scale(1.05); /* Slight scale on hover */
-    }
-
-    /* News Ticker Bar */
-    .news-ticker {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      background-color: black; /* Black background */
-      color: white; /* White text */
+      color: #fff;
+      border: none;
+      border-radius: 25px;
       font-size: 1rem;
-      height: 40px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #ffd700;
+      color: #333;
+      transform: translateY(-3px);
+    }
+
+    /* Centered Card Container */
+    .center-container {
       display: flex;
-      align-items: center;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    /* Scrolling Text */
-    .ticker-text {
-      display: inline-block;
-      white-space: nowrap;
-      animation: scroll 20s linear infinite; /* Immediate start with slower speed */
-    }
-
-    /* Space between sentences */
-    .ticker-text span {
-      margin-right: 50px; /* Adjust space between each phrase */
-    }
-
-    /* Scroll Animation */
-    @keyframes scroll {
-      from {
-        transform: translateX(100%);
-      }
-      to {
-        transform: translateX(-100%);
-      }
-    }
-
-    /* Modal Background Overlay */
-    .modal-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-    }
-
-    /* Modal Container */
-    .modal {
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-      max-width: 600px;
-      width: 90%;
       text-align: center;
-      color: black;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      flex-grow: 1;
+      width: 100%;
+      height: calc(100vh - 70px); /* Exclude header height */
+      padding: 20px;
     }
 
-    .modal h2 {
+    /* Card Wrapper */
+    .card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Question Heading */
+    .question-heading {
       font-size: 1.8rem;
+      font-weight: 600;
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
-    /* Stylish Buttons for Options */
+    /* Options Container */
     .options-container {
       display: flex;
-      gap: 20px;
+      flex-wrap: wrap;
       justify-content: center;
-      margin-top: 20px;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
     }
 
     .option {
-      flex: 1;
-      padding: 40px; /* Increased padding for a larger block */
-      border-radius: 10px;
-      background-color: black;
-      color: gold;
+      padding: 20px 30px;
+      background-color: #333; /* Black background */
+      color: #fff; /* White text */
+      border-radius: 15px;
       font-size: 1.2rem;
       font-weight: bold;
       text-align: center;
-      border: 2px solid gold;
       cursor: pointer;
       transition: all 0.3s ease;
+      width: 180px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 2px solid #ffd700; /* Gold border */
     }
 
     .option:hover {
-      background-color: gold;
-      color: black;
+      background-color: #ffd700; /* Gold on hover */
+      color: #333; /* Black text on hover */
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
     }
 
-    .option:active {
-      transform: scale(0.95);
-    }
-
-    /* Responsive Design for Smaller Screens */
-    @media (max-width: 600px) {
+    /* Responsiveness */
+    @media (max-width: 768px) {
       .options-container {
         flex-direction: column;
         gap: 15px;
       }
+
       .option {
-        padding: 20px; /* Reduce padding for smaller screens */
+        width: 100%; /* Full width for mobile */
+        max-width: 250px;
+      }
+
+      .logout-button {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      .logout-button {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+      }
+
+      .option {
         font-size: 1rem;
+      }
+
+      .question-heading {
+        font-size: 1.5rem;
+      }
+
+      .card {
+        padding: 30px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Blurred Background Image Container -->
+  <!-- Background -->
   <div class="background-container"></div>
 
-  <!-- Header with Modern Styling -->
+  <!-- Header -->
   <div class="header">
     <div class="header-title">Dashboard</div>
-    <button class="logout-button">Log Out</button>
+    <button class="logout-button" onclick="window.location.href='signup.html'">Log Out</button>
   </div>
 
-  <!-- News Ticker Bar -->
-  <div class="news-ticker">
-    <div class="ticker-text">
-      <span> Your dream home is only a few clicks away </span> • 
-      <span> Your dream home is only a few clicks away </span> • 
-      <span> Your dream home is only a few clicks away </span> • 
-      <span> Your dream home is only a few clicks away </span>
-    </div>
-  </div>
-
-  <!-- Modal Background with Overlay -->
-  <div class="modal-background">
-    <div class="modal">
-      <h2> What would you like to do?  </h2>
+  <!-- Centered Options in Card -->
+  <div class="center-container">
+    <div class="card">
+      <div class="question-heading">What would you like to do?</div>
       <div class="options-container">
-        <div class="option" onclick="redirectTo('create')">Create Project</div>
-        <div class="option" onclick="redirectTo('view')">View Projects</div>
+        <div class="option" onclick="redirectTo('create')" style="padding: 20px 30px; background-color: #333; color: #fff; border-radius: 15px; font-size: 1.2rem; font-weight: bold; text-align: center; cursor: pointer; transition: all 0.3s ease; width: auto; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 2px solid #ffd700; white-space: nowrap !important;"> Get Advisory </div>
+        <div class="option" onclick="redirectTo('view')" style="padding: 20px 30px; background-color: #333; color: #fff; border-radius: 15px; font-size: 1.2rem; font-weight: bold; text-align: center; cursor: pointer; transition: all 0.3s ease; width: auto; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 2px solid #ffd700; white-space: nowrap !important;"> Start Project  </div>
+        <div class="option" onclick="redirectTo('track')" style="padding: 20px 30px; background-color: #333; color: #fff; border-radius: 15px; font-size: 1.2rem; font-weight: bold; text-align: center; cursor: pointer; transition: all 0.3s ease; width: auto; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border: 2px solid #ffd700; white-space: nowrap !important;"> Track Project</div>
+
+       
+
       </div>
     </div>
   </div>
 
-  <!-- JavaScript for Redirects -->
   <script>
-    // Redirect function
-    function redirectTo(option) {
-      if (option === 'create') {
-        window.location.href = 'create.html'; // Replace with actual link
-      } else if (option === 'view') {
-        window.location.href = 'viewprojects.html'; // Replace with actual link
+    function redirectTo(page) {
+      const pages = {
+        create: 'create.html',
+        view: 'viewprojects.html',
+        track: 'trackprojects.html',
+        advisory: 'advisory.html'
+      };
+
+      if (pages[page]) {
+        window.location.href = pages[page];
+      } else {
+        console.error('Invalid page selected.');
       }
     }
   </script>
-
 </body>
 </html>
+
