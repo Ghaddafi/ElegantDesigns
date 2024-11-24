@@ -282,13 +282,22 @@
   </div>
 
   <script>
+    // Function to show the spinner and simulate navigation
     function navigateWithSpinner(url) {
       const spinner = document.getElementById('spinner');
       spinner.classList.add('active');
+      
+      // Simulate a delay of 1 second before navigating to the new URL
       setTimeout(() => {
-        window.location.href = url;
-      }, 1000); // Simulates a delay
+        window.location.href = url;  // Navigate to the URL after the delay
+      }, 1000);  // Adjusted to simulate a 1 second delay
     }
+
+    // Handle the back navigation event
+    window.addEventListener('popstate', () => {
+      const spinner = document.getElementById('spinner');
+      spinner.classList.remove('active'); // Hide the spinner on back navigation
+    });
   </script>
 </body>
 </html>
