@@ -18,10 +18,9 @@
       background-color: #f8f9fa;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
-      margin: 0;
-      flex-direction: column;
+      overflow: hidden;
     }
 
     /* Background */
@@ -33,8 +32,18 @@
       height: 100%;
       background: url('a.jpg') no-repeat center center fixed;
       background-size: cover;
+      animation: parallax 20s infinite linear;
       filter: blur(10px);
       z-index: -1;
+    }
+
+    @keyframes parallax {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 100% 100%;
+      }
     }
 
     /* Header */
@@ -65,8 +74,10 @@
     }
 
     .header-title {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       color: #333;
     }
 
@@ -93,33 +104,48 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      height: calc(100vh - 70px);
       width: 100%;
-      flex-grow: 1; /* Allow it to take up remaining space */
       padding: 20px;
-      box-sizing: border-box;
-      margin-top: 50px; /* Adds a margin at the top to move content down */
+      margin-top: 50px; /* Adjust spacing from header */
+      overflow-y: auto;
     }
 
     .card {
       background: #fff;
       padding: 30px 20px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
       max-height: 80%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-sizing: border-box;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     .question-heading {
-      font-size: 1.5rem;
+      font-size: 1.4rem; /* Adjusted size */
       font-weight: 600;
+      line-height: 1.2; /* Improved spacing */
       color: #444;
       margin-bottom: 20px;
-      text-align: center;
+      text-align: center; /* Ensures alignment looks good across devices */
+      white-space: nowrap; /* Prevents line breaks */
+      overflow: hidden; /* Ensures no text overflow */
+      text-overflow: ellipsis; /* Adds ellipsis for smaller widths */
     }
 
     .options-container {
@@ -128,6 +154,7 @@
       justify-content: center;
       gap: 15px;
       width: 100%;
+      padding-bottom: 10px; /* Added space below the last option */
     }
 
     .option {
@@ -193,59 +220,6 @@
         transform: rotate(360deg);
       }
     }
-
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-      .header-title {
-        font-size: 1.4rem;
-      }
-
-      .question-heading {
-        font-size: 1.3rem;
-      }
-
-      .option {
-        font-size: 0.9rem;
-        padding: 12px 18px;
-        max-width: 220px;
-      }
-
-      .card {
-        max-width: 90%;
-        padding: 20px 15px;
-      }
-
-      .logout-button {
-        font-size: 0.8rem;
-        padding: 8px 15px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .header-title {
-        font-size: 1.2rem;
-      }
-
-      .question-heading {
-        font-size: 1.2rem;
-      }
-
-      .option {
-        font-size: 0.85rem;
-        padding: 10px 15px;
-        max-width: 180px;
-      }
-
-      .card {
-        max-width: 95%;
-        padding: 15px 10px;
-      }
-
-      .logout-button {
-        font-size: 0.7rem;
-        padding: 7px 12px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -268,10 +242,10 @@
       <div class="options-container">
         <div class="option" onclick="navigateWithSpinner('create.html')">Start Project</div>
         <div class="option" onclick="navigateWithSpinner('advisory.html')">Book Advisory</div>
-        <div class="option" onclick="navigateWithSpinner('create.html')"> Buy Designs </div>
-        <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Buy Materials </div>
-        <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Buy Land  </div>
-        <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Track Project  </div>
+        <div class="option" onclick="navigateWithSpinner('designs.html')">Buy Designs</div>
+        <div class="option" onclick="navigateWithSpinner('materials.html')">Buy Materials</div>
+        <div class="option" onclick="navigateWithSpinner('land.html')">Buy Land</div>
+        <div class="option" onclick="navigateWithSpinner('track.html')">Track Project</div>
       </div>
     </div>
   </div>
@@ -282,22 +256,25 @@
   </div>
 
   <script>
-    // Function to show the spinner and simulate navigation
+    let isBackNavigation = false;
+
+    // Detect back navigation
+    window.addEventListener('popstate', () => {
+      isBackNavigation = true;
+    });
+
     function navigateWithSpinner(url) {
+      if (isBackNavigation) {
+        isBackNavigation = false;
+        return;
+      }
+
       const spinner = document.getElementById('spinner');
       spinner.classList.add('active');
-      
-      // Simulate a delay of 1 second before navigating to the new URL
       setTimeout(() => {
-        window.location.href = url;  // Navigate to the URL after the delay
-      }, 1000);  // Adjusted to simulate a 1 second delay
+        window.location.href = url;
+      }, 1000); // Simulates a delay
     }
-
-    // Handle the back navigation event
-    window.addEventListener('popstate', () => {
-      const spinner = document.getElementById('spinner');
-      spinner.classList.remove('active'); // Hide the spinner on back navigation
-    });
   </script>
 </body>
 </html>
