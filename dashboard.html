@@ -21,6 +21,7 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      margin: 0;
     }
 
     /* Background */
@@ -96,6 +97,7 @@
       width: 100%;
       overflow-y: auto; /* Enables scrolling when content overflows */
       padding: 20px;
+      box-sizing: border-box;
     }
 
     .card {
@@ -105,10 +107,11 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 400px;
-      max-height: 80%; /* Ensures card never exceeds 80% of viewport height */
+      max-height: 80%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-sizing: border-box;
     }
 
     .question-heading {
@@ -116,6 +119,7 @@
       font-weight: 600;
       color: #444;
       margin-bottom: 20px;
+      text-align: center;
     }
 
     .options-container {
@@ -189,6 +193,59 @@
         transform: rotate(360deg);
       }
     }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 1.4rem;
+      }
+
+      .question-heading {
+        font-size: 1.3rem;
+      }
+
+      .option {
+        font-size: 0.9rem;
+        padding: 12px 18px;
+        max-width: 220px;
+      }
+
+      .card {
+        max-width: 90%;
+        padding: 20px 15px;
+      }
+
+      .logout-button {
+        font-size: 0.8rem;
+        padding: 8px 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-title {
+        font-size: 1.2rem;
+      }
+
+      .question-heading {
+        font-size: 1.2rem;
+      }
+
+      .option {
+        font-size: 0.85rem;
+        padding: 10px 15px;
+        max-width: 180px;
+      }
+
+      .card {
+        max-width: 95%;
+        padding: 15px 10px;
+      }
+
+      .logout-button {
+        font-size: 0.7rem;
+        padding: 7px 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -215,8 +272,6 @@
         <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Buy Materials </div>
         <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Buy Land  </div>
         <div class="option" onclick="navigateWithSpinner('viewprojects.html')"> Track Project  </div>
-       
-
       </div>
     </div>
   </div>
