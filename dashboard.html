@@ -113,11 +113,11 @@
 
     .card {
       background: #fff;
-      padding: 30px 20px;
+      padding: 16px 8px; /* 20% less padding */
       border-radius: 20px;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       width: 100%;
-      max-width: 400px;
+      max-width: 320px; /* 20% less width on tablets */
       max-height: 80%;
       display: flex;
       flex-direction: column;
@@ -152,7 +152,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
+      gap: 8px; /* 20% less gap */
       width: 100%;
       padding-bottom: 10px; /* Added space below the last option */
     }
@@ -171,6 +171,7 @@
       max-width: 250px;
       text-transform: uppercase;
       border: 1px solid #ffd700;
+      text-decoration: none;
     }
 
     .option:hover {
@@ -232,85 +233,34 @@
       color: black;
     }
 
-    /* Mobile Responsiveness */
+    /* Media Queries for Mobile */
     @media (max-width: 768px) {
-      .header-logo img {
-        height: 30px;
-      }
-
-      .header-title {
-        font-size: 1.5rem;
-      }
-
-      .logout-button {
-        padding: 8px 15px;
-        font-size: 0.8rem;
-      }
-
       .card {
-        padding: 20px 15px;
-        max-width: 100%;
-        margin-top: 20px;
-      }
-
-      .question-heading {
-        font-size: 1.2rem;
-        margin-bottom: 15px;
+        padding: 16px 8px; /* 20% less padding */
+        max-width: 320px; /* 20% less width */
       }
 
       .options-container {
-        gap: 10px;
+        gap: 8px; /* 20% less gap */
       }
 
-      .option {
-        padding: 12px 15px;
-        font-size: 0.9rem;
-        max-width: 200px;
-      }
-
-      .modal-content {
-        width: 90%;
-        height: auto;
-        padding: 15px;
-      }
-
-      .close-modal {
-        font-size: 0.9rem;
+      .center-container {
+        margin-top: 40px; /* 20% less margin */
       }
     }
 
     @media (max-width: 480px) {
-      .header-title {
-        font-size: 1.2rem;
-      }
-
       .card {
-        padding: 15px;
-        max-width: 100%;
-      }
-
-      .question-heading {
-        font-size: 1rem;
+        padding: 12px 4px; /* 20% less padding */
+        max-width: 240px; /* 20% less width */
       }
 
       .options-container {
-        gap: 8px;
+        gap: 6px; /* 20% less gap */
       }
 
-      .option {
-        padding: 10px 12px;
-        font-size: 0.8rem;
-        max-width: 180px;
-      }
-
-      .modal-content {
-        width: 90%;
-        height: auto;
-        padding: 10px;
-      }
-
-      .close-modal {
-        font-size: 0.8rem;
+      .center-container {
+        margin-top: 30px; /* 20% less margin */
       }
     }
   </style>
@@ -333,12 +283,12 @@
     <div class="card">
       <div class="question-heading">What would you like to do?</div>
       <div class="options-container">
-        <div class="option" onclick="navigateWithSpinner('create.html')">Start Project</div>
-        <div class="option" onclick="openModal()">Book Advisory</div>
-        <div class="option" onclick="navigateWithSpinner('properties.html')">Buy Designs</div>
-        <div class="option" onclick="navigateWithSpinner('https://shop.elegantdesignstz.com/')">Buy Materials</div>
-        <div class="option" onclick="navigateWithSpinner('land.html')">Buy Land</div>
-        <div class="option" onclick="navigateWithSpinner('track.html')">Track Project</div>
+        <a class="option" href="create.html">Start Project</a>
+        <a class="option" href="#" onclick="openModal()">Book Advisory</a>
+        <a class="option" href="properties.html">Preview Designs</a>
+        <a class="option" href="https://shop.elegantdesignstz.com/">Buy Materials</a>
+        <a class="option" href="land.html">Buy Land</a>
+        <a class="option" href="viewprojects.html">Track Project</a>
       </div>
     </div>
   </div>
@@ -347,18 +297,24 @@
   <div class="modal" id="calendlyModal">
     <div class="modal-content">
       <div class="calendly-inline-widget" data-url="https://calendly.com/katalamoses-elegantdesigns/60min" style="width: 100%; height: 100%;"></div>
-      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-      <button class="close-modal" onclick="closeModal()">Back</button>
+      <button class="close-modal" onclick="closeModal()">Close</button>
     </div>
   </div>
 
+  <script src="https://assets.calendly.com/assets/external/widget.js"></script>
   <script>
+    // Modal Functions
     function openModal() {
       document.getElementById('calendlyModal').classList.add('active');
     }
 
     function closeModal() {
       document.getElementById('calendlyModal').classList.remove('active');
+    }
+
+    // Navigation with Spinner (example)
+    function navigateWithSpinner(url) {
+      window.location.href = url;
     }
   </script>
 </body>
