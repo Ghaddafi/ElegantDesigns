@@ -191,7 +191,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 10;
+      z-index: 1001;
       visibility: hidden;
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -220,6 +220,58 @@
         transform: rotate(360deg);
       }
     }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      width: 90%;
+      max-width: 700px;
+      height: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-modal {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: black;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      background: #ffd700;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -241,11 +293,11 @@
       <div class="question-heading">What would you like to do?</div>
       <div class="options-container">
         <div class="option" onclick="navigateWithSpinner('create.html')">Start Project</div>
-        <div class="option" onclick="navigateWithSpinner('advisory.html')">Book Advisory</div>
-        <div class="option" onclick="navigateWithSpinner('https://elegantdesignstz.com/properties.html')">Buy Designs</div>
+        <div class="option" onclick="openModalWithSpinner()">Book Advisory</div>
+        <div class="option" onclick="navigateWithSpinner('properties.html')">Buy Designs</div>
         <div class="option" onclick="navigateWithSpinner('https://shop.elegantdesignstz.com/')">Buy Materials</div>
         <div class="option" onclick="navigateWithSpinner('land.html')">Buy Land</div>
-        <div class="option" onclick="navigateWithSpinner('track.html')">Track Project</div>
+        <div class="option" onclick="navigateWithSpinner('viewprojects.html')">Track Project</div>
       </div>
     </div>
   </div>
@@ -255,25 +307,39 @@
     <div></div>
   </div>
 
+  <!-- Modal -->
+  <div class="modal" id="calendlyModal">
+    <div class="modal-content">
+      <div class="calendly-inline-widget" data-url="https://calendly.com/katalamoses-elegantdesigns/60min" style="width: 100%; height: 100%;"></div>
+      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      <button class="close-modal" onclick="closeModal()">Back</button>
+    </div>
+  </div>
+
   <script>
-    let isBackNavigation = false;
-
-    // Detect back navigation
-    window.addEventListener('popstate', () => {
-      isBackNavigation = true;
-    });
-
     function navigateWithSpinner(url) {
-      if (isBackNavigation) {
-        isBackNavigation = false;
-        return;
-      }
-
       const spinner = document.getElementById('spinner');
       spinner.classList.add('active');
       setTimeout(() => {
         window.location.href = url;
       }, 1000); // Simulates a delay
+    }
+
+    function openModalWithSpinner() {
+      const spinner = document.getElementById('spinner');
+      spinner.classList.add('active');
+      setTimeout(() => {
+        spinner.classList.remove('active');
+        openModal();
+      }, 1000);
+    }
+
+    function openModal() {
+      document.getElementById('calendlyModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('calendlyModal').classList.remove('active');
     }
   </script>
 </body>
