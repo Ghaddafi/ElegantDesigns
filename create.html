@@ -191,9 +191,9 @@ h1 {
         </div>
 
         <div id="step5" class="form-step">
-            <h3> Do you know where you will build your project? </h3>
-            <input type="text" id="budget" placeholder=" If not, no worries. We can guide you" oninput="updateState('budget', this.value)">
-            <p class="error" id="error-budget">Please enter location of project.</p>
+            <h3> If you loved a design from our site, please enter the design ID below.  </h3>
+            <input type="text" id="budget" placeholder=" Enter design ID here, or type 'no' if you have your own plan" oninput="updateState('budget', this.value)">
+            <p class="error" id="error-budget">Please enter design ID </p>
             <div class="button-container">
                 <button onclick="prevStep(5)">Back</button>
                 <button onclick="nextStep(5)">Next</button>
@@ -283,7 +283,7 @@ h1 {
                 <tr><th>Email</th><td id="preview-email"></td></tr>
                 <tr><th>Phone</th><td id="preview-phone"></td></tr>
                 <tr><th>Location</th><td id="preview-location"></td></tr>
-                <tr><th>Budget</th><td id="preview-budget"></td></tr>
+                <tr><th>Design ID</th><td id="preview-budget"></td></tr>
                 <tr><th>Project Type</th><td id="preview-projectType"></td></tr>
                 <tr><th>Timeline</th><td id="preview-timeline"></td></tr>
                 <tr><th>Financing</th><td id="preview-financing"></td></tr>
