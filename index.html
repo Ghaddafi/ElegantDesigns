@@ -1,593 +1,1336 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elegant Designs — Architecture & Construction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <head>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:#fff;color:#111;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+:root{
+  --gold:#B8962E;
+  --gold2:#D4AE4A;
+  --black:#111111;
+  --off-black:#1A1A1A;
+  --white:#FFFFFF;
+  --off-white:#F8F8F6;
+  --light:#F2F2F0;
+  --mid:#888;
+  --border:#E0E0DC;
+}
 
-    <title> Build with ELegant </title>
+.img-slot {
+  position:relative;
+  width:100%;height:100%;
+  background:#1A1A1A;
+  overflow:hidden;
+  display:block;
+}
+.img-slot img {
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .8s cubic-bezier(.22,.61,.36,1);
+  opacity:0;
+}
+.img-slot img.loaded { opacity:1; }
+.img-slot:hover img { transform:scale(1.05); }
 
-    <!-- favicon -->
+.img-slot::before {
+  content: attr(data-label);
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(184,150,46,.06),
+      rgba(184,150,46,.06) 1px,
+      transparent 1px,
+      transparent 28px
+    );
+  padding:2rem;text-align:center;
+  pointer-events:none;
+  z-index:1;
+  transition:opacity .3s;
+}
+.img-slot.has-image::before { opacity:0; }
 
-    <link rel="icon" href="logo.svg" type="image/png">
+.hero .img-slot img,
+.proj-card .img-slot img,
+.proj-card-sm .img-slot img {
+  object-fit:cover;
+}
 
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap.min.css" rel="stylesheet">
+.img-slot .edit-badge {
+  position:absolute;bottom:.8rem;right:.8rem;
+  background:var(--gold);color:var(--black);
+  font-family:'Barlow',sans-serif;font-size:.68rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.3rem .8rem;z-index:20;
+  opacity:0;transform:translateY(4px);
+  transition:all .25s;pointer-events:none;
+}
+.img-slot:hover .edit-badge { opacity:1;transform:translateY(0); }
 
+header{position:fixed;top:0;left:0;right:0;z-index:500;transition:background .4s,box-shadow .4s;}
+header.solid{background:#fff;box-shadow:0 1px 0 var(--border);}
+nav{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:1.1rem;font-weight:700;letter-spacing:.02em;color:#fff;transition:color .3s;white-space:nowrap;}
+header.solid .nav-logo{color:var(--black);}
+.nav-logo .dot{color:var(--gold);}
+.nav-center{display:flex;gap:0;list-style:none}
+.nav-center a{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8);padding:.5rem 1.2rem;transition:color .2s;white-space:nowrap;}
+.nav-center a:hover{color:var(--gold);}
+header.solid .nav-center a{color:var(--off-black);}
+header.solid .nav-center a:hover{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:1.5rem;}
+.nav-contact{font-family:'Barlow',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid rgba(255,255,255,.6);color:#fff;padding:.5rem 1.4rem;transition:all .25s;white-space:nowrap;}
+.nav-contact:hover{background:#fff;color:var(--black);}
+header.solid .nav-contact{border-color:var(--black);color:var(--black);}
+header.solid .nav-contact:hover{background:var(--black);color:#fff;}
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="fontawesome.css">
-    <link rel="stylesheet" href="templatemo-villa-agency.css">
-    <link rel="stylesheet" href="owl.css">
-    <link rel="stylesheet" href="animate.css">
-    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+.hero{position:relative;width:100%;height:100vh;min-height:620px;overflow:hidden;background:var(--black);}
 
-    <style>
-      /* Reserve space for hero banner */
-      .main-banner {
-        min-height: 100vh !important; /* Full viewport height */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    </style>
-<!--
+.intro-slide {
+  position:absolute;inset:0;
+  background:var(--black);
+  z-index:100;
+  opacity:1;
+  transition:opacity .8s ease;
+  overflow:hidden;
+}
+.intro-slide.fade-out {
+  opacity:0;
+  pointer-events:none;
+}
+.intro-bg {
+  position:absolute;inset:0;
+  background:var(--black);
+}
+.intro-bg .img-slot {
+  position:absolute;inset:0;
+}
+.intro-bg::after {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(17,17,17,.85) 0%,rgba(17,17,17,.65) 50%,rgba(17,17,17,.75) 100%);
+  z-index:1;
+}
+.intro-content {
+  position:relative;z-index:2;
+  height:100%;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 0 6rem 0;
+}
+.intro-inner {
+  max-width:1600px;margin:0 auto;width:100%;padding:0 2.5rem;
+}
+.intro-text {
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(3rem,7vw,7.5rem);
+  font-weight:400;
+  line-height:1;
+  letter-spacing:-.03em;
+  color:#fff;
+  margin-bottom:1.2rem;
+  opacity:0;
+}
+.intro-text.visible {
+  opacity:1;
+  animation:fadeInUp .6s ease forwards;
+}
+.intro-text .word {
+  display:inline-block;
+  opacity:0;
+  animation:fadeIn .4s ease forwards;
+}
+@keyframes fadeIn {
+  to { opacity:1; }
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.intro-text em {
+  font-style:italic;
+  color:var(--gold);
+}
+.intro-tagline {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.8rem;
+  font-weight:500;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  opacity:0;
+  display:flex;align-items:center;gap:.8rem;
+}
+.intro-tagline::before{content:'';width:28px;height:1.5px;background:var(--gold);}
+.intro-tagline.visible {
+  animation:fadeIn .6s ease forwards;
+}
 
-TemplateMo 591 villa agency
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;overflow:hidden;}
+.slide.active{opacity:1;z-index:1;}
+.slide .img-slot{position:absolute;inset:0;width:100%;height:100%;}
+.slide .img-slot::before{font-size:.9rem;}
+.slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(17,17,17,.78) 0%,rgba(17,17,17,.22) 45%,transparent 72%),linear-gradient(to right,rgba(17,17,17,.45) 0%,transparent 55%);z-index:2;pointer-events:none;}
+.hero-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 5rem;}
+.hero-inner{max-width:1600px;margin:0 auto;width:100%;padding:0 2.5rem;}
+.hero-captions{position:relative;min-height:170px;}
+.caption{position:absolute;bottom:0;left:0;opacity:0;transform:translateY(16px);transition:opacity .8s .3s,transform .8s .3s;pointer-events:none;}
+.caption.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.caption-tag{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;display:flex;align-items:center;gap:.8rem;}
+.caption-tag::before{content:'';width:28px;height:1.5px;background:var(--gold);}
+.caption-h{font-family:'Libre Baskerville',serif;font-size:clamp(2.6rem,5.5vw,6rem);font-weight:400;line-height:.95;letter-spacing:-.02em;color:#fff;margin-bottom:1.2rem;max-width:16ch;}
+.caption-h em{font-style:italic;color:var(--gold);}
+.caption-sub{font-family:'Barlow',sans-serif;font-size:.95rem;font-weight:300;color:rgba(255,255,255,.7);max-width:40ch;line-height:1.7;margin-bottom:1.8rem;}
+.caption-btn{font-family:'Barlow',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.6rem;color:#fff;border-bottom:1.5px solid var(--gold);padding-bottom:3px;transition:color .2s,gap .2s;}
+.caption-btn::after{content:'→';font-size:.85rem;}
+.caption-btn:hover{color:var(--gold);gap:.9rem;}
+.hero-controls{position:absolute;right:2.5rem;bottom:5rem;z-index:10;display:flex;flex-direction:column;align-items:flex-end;gap:1rem;}
+.slide-count{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.5);}
+.slide-count span{color:#fff;font-size:.9rem;}
+.slide-dots{display:flex;gap:.5rem;}
+.dot-btn{width:28px;height:2px;background:rgba(255,255,255,.3);border:none;cursor:pointer;transition:background .3s,width .3s;padding:0;}
+.dot-btn.active{background:var(--gold);width:44px;}
+.nav-arrows{display:flex;gap:.5rem;}
+.arrow-btn{width:40px;height:40px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;}
+.arrow-btn:hover{border-color:#fff;background:rgba(255,255,255,.1);}
 
-https://templatemo.com/tm-591-villa-agency
+.intro-band{background:var(--black);padding:1.6rem 2.5rem;border-top:1px solid rgba(184,150,46,.3);}
+.intro-band-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.ib-claim{font-family:'Libre Baskerville',serif;font-size:1.05rem;font-style:italic;color:rgba(255,255,255,.75);max-width:52ch;}
+.ib-stats{display:flex;gap:3rem;}
+.ib-stat-v{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:700;color:var(--gold);display:block;line-height:1;}
+.ib-stat-l{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:.25rem;display:block;}
 
--->
-<!-- Calendly badge widget end -->
+.section-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+.section-title{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:400;line-height:1.05;letter-spacing:-.01em;color:var(--black);}
+.section-title em{font-style:italic;color:var(--gold);}
+.view-all{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);border-bottom:1.5px solid var(--black);padding-bottom:2px;transition:color .2s,border-color .2s;white-space:nowrap;align-self:flex-end;}
+.view-all:hover{color:var(--gold);border-color:var(--gold);}
 
-  </head>
+.projects-section{background:#fff;padding:0;}
+.projects-header{max-width:1600px;margin:0 auto;padding:5rem 2.5rem 3rem;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);}
 
+.proj-grid-primary{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:600px 440px;gap:3px;background:var(--border);}
+.proj-card{position:relative;overflow:hidden;background:var(--light);}
+.proj-card:nth-child(1){grid-column:1;grid-row:1;}
+.proj-card:nth-child(2){grid-column:2;grid-row:1;}
+.proj-card:nth-child(3){grid-column:1;grid-row:2;}
+.proj-card:nth-child(4){grid-column:2;grid-row:2;}
+.proj-card .img-slot{position:absolute;inset:0;}
+.proj-card:hover .img-slot img{transform:scale(1.06);}
+
+.proj-info{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2.5rem;background:linear-gradient(to top,rgba(17,17,17,.82) 0%,rgba(17,17,17,.1) 55%,transparent 100%);transition:background .3s;z-index:5;}
+.proj-card:hover .proj-info{background:linear-gradient(to top,rgba(17,17,17,.92) 0%,rgba(17,17,17,.18) 60%,transparent 100%);}
+.proj-type{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+.proj-name{font-family:'Libre Baskerville',serif;font-size:1.5rem;font-weight:400;color:#fff;line-height:1.15;margin-bottom:.4rem;}
+.proj-card:nth-child(1) .proj-name,.proj-card:nth-child(2) .proj-name{font-size:2rem;}
+.proj-loc{font-family:'Barlow',sans-serif;font-size:.82rem;font-weight:300;color:rgba(255,255,255,.6);}
+.proj-arrow{position:absolute;top:2rem;right:2rem;width:38px;height:38px;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;opacity:0;transform:translateY(-6px);transition:all .3s;z-index:6;}
+.proj-card:hover .proj-arrow{opacity:1;transform:translateY(0);}
+
+.proj-grid-secondary{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:var(--border);border-top:3px solid var(--border);}
+.proj-card-sm{position:relative;overflow:hidden;height:360px;background:var(--light);}
+.proj-card-sm .img-slot{position:absolute;inset:0;}
+.proj-card-sm:hover .img-slot img{transform:scale(1.06);}
+.proj-card-sm .proj-info{padding:2rem;}
+.proj-card-sm .proj-name{font-size:1.3rem;}
+
+.statement-section{background:var(--black);padding:7rem 2.5rem;position:relative;overflow:hidden;}
+.statement-section::before{content:'DESIGN';font-family:'Libre Baskerville',serif;font-weight:700;font-size:26vw;color:rgba(255,255,255,.025);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;letter-spacing:-.04em;pointer-events:none;}
+.stmt-inner{max-width:1600px;margin:0 auto;position:relative;z-index:1;}
+.stmt-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:6rem;align-items:center;}
+.stmt-label{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:.7rem;}
+.stmt-label::before{content:'';width:24px;height:1.5px;background:var(--gold);}
+.stmt-h{font-family:'Libre Baskerville',serif;font-size:clamp(2.5rem,4.5vw,4.5rem);font-weight:400;line-height:1.05;letter-spacing:-.02em;color:#fff;}
+.stmt-h em{font-style:italic;color:var(--gold);}
+.stmt-body{font-family:'Barlow',sans-serif;font-size:1.05rem;font-weight:300;line-height:1.9;color:rgba(255,255,255,.65);margin-bottom:2rem;}
+.stmt-link{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;border-bottom:1.5px solid var(--gold);padding-bottom:3px;display:inline-block;transition:color .2s;}
+.stmt-link:hover{color:var(--gold);}
+
+.pillars{background:#fff;border-top:1px solid var(--border);}
+.pillars-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.pillar{padding:4rem 3rem;border-right:1px solid var(--border);position:relative;transition:background .3s;}
+.pillar:last-child{border-right:none;}
+.pillar:hover{background:var(--off-white);}
+.pillar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.pillar:hover::after{transform:scaleX(1);}
+.pillar-num{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.18em;color:var(--gold);margin-bottom:2rem;display:block;}
+.pillar-title{font-family:'Libre Baskerville',serif;font-size:1.4rem;font-weight:400;color:var(--black);margin-bottom:1rem;line-height:1.2;}
+.pillar-body{font-family:'Barlow',sans-serif;font-size:.92rem;font-weight:300;line-height:1.85;color:#555;}
+
+.insights{background:var(--off-white);padding:6rem 2.5rem;}
+.insights-inner{max-width:1600px;margin:0 auto;}
+.insights-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.insights-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem;}
+.insight-card{}
+.insight-img{width:100%;aspect-ratio:16/10;overflow:hidden;margin-bottom:1.2rem;background:var(--light);position:relative;}
+.insight-img .img-slot{position:absolute;inset:0;}
+.insight-img:hover .img-slot img{transform:scale(1.04);}
+.insight-cat{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+.insight-title{font-family:'Libre Baskerville',serif;font-size:1.1rem;font-weight:400;line-height:1.4;color:var(--black);margin-bottom:.5rem;transition:color .2s;}
+.insight-card:hover .insight-title{color:var(--gold);}
+.insight-date{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:300;color:var(--mid);}
+
+.metrics{background:var(--black);padding:5rem 2.5rem;position:relative;overflow:hidden;}
+.metrics::before{content:'NET ZERO';font-family:'Libre Baskerville',serif;font-weight:700;font-size:18vw;color:rgba(255,255,255,.02);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;letter-spacing:-.05em;pointer-events:none;}
+.metrics-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;z-index:1;}
+.metric{padding:2.5rem 2.5rem;border-right:1px solid rgba(255,255,255,.12);position:relative;transition:background .3s;}
+.metric:last-child{border-right:none;}
+.metric:hover{background:rgba(255,255,255,.03);}
+.metric::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.metric:hover::after{transform:scaleX(1);}
+.metric-val{font-family:'Libre Baskerville',serif;font-size:3.8rem;font-weight:700;color:var(--gold);display:block;line-height:1;margin-bottom:.8rem;}
+.metric-lbl{font-family:'Barlow',sans-serif;font-size:.92rem;font-weight:600;color:#fff;margin-bottom:.4rem;display:block;line-height:1.4;}
+.metric-sub{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:300;color:rgba(255,255,255,.45);margin-top:.3rem;display:block;line-height:1.6;}
+
+.spotlight{background:#fff;}
+.spotlight-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:600px;}
+.spot-img{position:relative;overflow:hidden;background:var(--black);}
+.spot-img .img-slot{position:absolute;inset:0;}
+.spot-label{position:absolute;top:2rem;left:2rem;background:var(--gold);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.4rem 1rem;z-index:10;}
+.spot-text{padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center;background:var(--black);}
+.spot-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem;}
+.spot-eyebrow::before{content:'';width:24px;height:1.5px;background:var(--gold);}
+.spot-h{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,3.5vw,3.5rem);font-weight:400;line-height:1.08;letter-spacing:-.01em;color:#fff;margin-bottom:1.5rem;}
+.spot-h em{font-style:italic;color:var(--gold);}
+.spot-specs{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);padding:1.8rem 0;margin-bottom:1.8rem;}
+.spec-v{font-family:'Libre Baskerville',serif;font-size:1.8rem;font-weight:700;color:var(--gold);display:block;line-height:1;}
+.spec-k{font-family:'Barlow',sans-serif;font-size:.72rem;font-weight:300;color:rgba(255,255,255,.45);margin-top:.3rem;display:block;letter-spacing:.05em;}
+.spot-body{font-family:'Barlow',sans-serif;font-size:.92rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,.6);max-width:40ch;margin-bottom:2rem;}
+.spot-btn{font-family:'Barlow',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border-bottom:1.5px solid var(--gold);padding-bottom:3px;display:inline-block;transition:color .2s;}
+.spot-btn:hover{color:#fff;border-color:#fff;}
+
+.process{background:var(--off-white);padding:7rem 2.5rem;}
+.process-inner{max-width:1600px;margin:0 auto;}
+.process-header{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:end;margin-bottom:5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border);}
+.process-intro{font-family:'Barlow',sans-serif;font-size:1rem;font-weight:300;line-height:1.95;color:#555;}
+
+.process-steps{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:3rem;
+  position:relative;
+}
+.process-steps::before{
+  content:'';position:absolute;top:2.2rem;left:2.5rem;right:2.5rem;
+  height:2px;background:linear-gradient(to right,var(--gold) 0%,var(--border) 100%);
+  z-index:0;
+}
+.step{
+  position:relative;z-index:1;
+  padding:0;
+  display:flex;flex-direction:column;gap:0;
+}
+.step-num{
+  width:44px;height:44px;
+  border-radius:50%;
+  background:var(--gold);
+  color:var(--black);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.75rem;font-weight:700;letter-spacing:.1em;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:2rem;
+  box-shadow:0 0 0 6px var(--off-white),0 0 0 7px var(--border);
+  transition:all .3s;
+}
+.step:hover .step-num{
+  background:var(--black);
+  color:var(--gold);
+  box-shadow:0 0 0 6px var(--off-white),0 0 0 8px var(--gold);
+}
+.step-line{display:none;}
+.step-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.1rem;font-weight:400;
+  color:var(--black);
+  margin-bottom:1.2rem;
+  line-height:1.3;
+}
+.step-body{
+  font-family:'Barlow',sans-serif;
+  font-size:.88rem;font-weight:300;
+  line-height:1.85;color:#666;
+}
+
+.contact{background:var(--black);padding:7rem 2.5rem;}
+.contact-inner{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:start;}
+.ct-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem;}
+.ct-eyebrow::before{content:'';width:24px;height:1.5px;background:var(--gold);}
+.ct-h{font-family:'Libre Baskerville',serif;font-size:clamp(2.5rem,4.5vw,4.5rem);font-weight:400;line-height:1;letter-spacing:-.02em;color:#fff;margin-bottom:1.5rem;}
+.ct-h em{font-style:italic;color:var(--gold);}
+.ct-sub{font-family:'Barlow',sans-serif;font-size:.95rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,.55);max-width:36ch;margin-bottom:2.5rem;}
+.ct-detail-item{padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:.2rem;}
+.ct-detail-label{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.ct-detail-val{font-family:'Barlow',sans-serif;font-size:.9rem;font-weight:300;color:rgba(255,255,255,.7);}
+.form{display:flex;flex-direction:column;gap:1.5rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.fg{display:flex;flex-direction:column;gap:.4rem;}
+.fl{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.fi,.fsel,.fta{font-family:'Barlow',sans-serif;font-size:.9rem;font-weight:300;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;padding:.75rem 1rem;width:100%;outline:none;transition:border-color .25s;appearance:none;}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--gold);}
+.fi::placeholder,.fta::placeholder{color:rgba(255,255,255,.2);}
+.fta{resize:vertical;min-height:100px;}
+.fsub{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:1rem 2.5rem;cursor:pointer;align-self:flex-start;transition:all .25s;}
+.fsub:hover{background:var(--gold2);transform:translateY(-2px);}
+
+.awards{background:var(--off-white);padding:3rem 2.5rem;border-top:1px solid var(--border);}
+.awards-inner{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:3rem;flex-wrap:wrap;}
+.awards-label{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
+.awards-div{width:1px;height:22px;background:var(--border);}
+.awards-list{display:flex;gap:2.5rem;flex-wrap:wrap;}
+.award-item{font-family:'Barlow',sans-serif;font-size:.85rem;font-weight:300;color:#555;transition:color .2s;}
+.award-item:hover{color:var(--black);}
+
+footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);}
+.footer-main{max-width:1600px;margin:0 auto;padding:4rem 2.5rem 2.5rem;display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:3rem;}
+.footer-brand{font-family:'Libre Baskerville',serif;font-size:1.1rem;font-weight:700;color:#fff;display:block;margin-bottom:.9rem;}
+.footer-brand .dot{color:var(--gold);}
+.footer-tagline{font-family:'Barlow',sans-serif;font-size:.85rem;font-weight:300;line-height:1.75;color:rgba(255,255,255,.35);max-width:28ch;margin-bottom:1.5rem;}
+.footer-social{display:flex;gap:1rem;}
+.fsocial{font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);transition:color .2s;}
+.fsocial:hover{color:var(--gold);}
+.fc-title{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.2rem;display:block;}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;}
+.fc a{font-family:'Barlow',sans-serif;font-size:.85rem;font-weight:300;color:rgba(255,255,255,.45);transition:color .2s;}
+.fc a:hover{color:#fff;}
+.footer-bottom{max-width:1600px;margin:0 auto;padding:1.5rem 2.5rem 2rem;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.fc-copy{font-family:'Barlow',sans-serif;font-size:.75rem;font-weight:300;color:rgba(255,255,255,.2);}
+.fc-links{display:flex;gap:2rem;}
+.fc-links a{font-family:'Barlow',sans-serif;font-size:.72rem;font-weight:300;color:rgba(255,255,255,.2);transition:color .2s;}
+.fc-links a:hover{color:rgba(255,255,255,.6);}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
+.rv.in{opacity:1;transform:none;}
+.rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.22s;}.rv.d3{transition-delay:.34s;}.rv.d4{transition-delay:.46s;}
+
+#img-mgr-btn {
+  position:fixed;bottom:2rem;right:2rem;z-index:1000;
+  background:var(--gold);color:var(--black);
+  font-family:'Barlow',sans-serif;font-size:.75rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.75rem 1.4rem;border:none;cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:all .25s;display:flex;align-items:center;gap:.5rem;
+}
+#img-mgr-btn:hover{background:var(--gold2);transform:translateY(-2px);}
+
+#img-mgr-panel {
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(8px);
+  display:none;overflow-y:auto;
+}
+#img-mgr-panel.open{display:block;}
+#img-mgr-inner {
+  max-width:960px;margin:3rem auto;
+  background:#fff;border-radius:2px;overflow:hidden;
+}
+#img-mgr-header {
+  background:var(--black);padding:1.8rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#img-mgr-header h2 {
+  font-family:'Libre Baskerville',serif;font-size:1.3rem;font-weight:400;color:#fff;
+}
+#img-mgr-header h2 em{font-style:italic;color:var(--gold);}
+#img-mgr-close {
+  background:none;border:1.5px solid rgba(255,255,255,.4);color:#fff;
+  width:36px;height:36px;cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+#img-mgr-close:hover{border-color:#fff;background:rgba(255,255,255,.1);}
+
+.mgr-notice {
+  background:#FDF6E3;border-bottom:1px solid #E8D9A0;
+  padding:1rem 2.5rem;
+  font-family:'Barlow',sans-serif;font-size:.82rem;line-height:1.6;color:#6B5800;
+}
+.mgr-notice strong{color:#4A3D00;}
+
+#img-mgr-slots { padding:2rem 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem; }
+
+.mgr-slot {
+  border:1.5px solid var(--border);overflow:hidden;
+  cursor:pointer;transition:border-color .25s;position:relative;
+}
+.mgr-slot:hover{border-color:var(--gold);}
+.mgr-slot-preview {
+  width:100%;aspect-ratio:16/9;background:#F2F2F0;
+  position:relative;overflow:hidden;
+}
+.mgr-slot-preview img {
+  width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .3s;
+}
+.mgr-slot-preview img.loaded{opacity:1;}
+.mgr-slot-preview .mgr-placeholder {
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  background:repeating-linear-gradient(45deg,rgba(184,150,46,.06),rgba(184,150,46,.06) 1px,transparent 1px,transparent 22px);
+}
+.mgr-placeholder-icon{font-size:2rem;opacity:.3;}
+.mgr-placeholder-text{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#888;}
+.mgr-slot-info{padding:.9rem 1rem;background:#fff;border-top:1px solid var(--border);}
+.mgr-slot-name{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--black);margin-bottom:.2rem;}
+.mgr-slot-desc{font-family:'Barlow',sans-serif;font-size:.72rem;color:#888;}
+.mgr-slot-size{font-family:'Barlow',sans-serif;font-size:.68rem;color:var(--gold);margin-top:.25rem;}
+.mgr-upload-overlay {
+  position:absolute;inset:0;background:rgba(184,150,46,.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  opacity:0;transition:opacity .25s;pointer-events:none;z-index:5;
+}
+.mgr-slot:hover .mgr-upload-overlay{opacity:1;}
+.mgr-upload-overlay span{font-family:'Barlow',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--black);}
+.mgr-status {
+  font-family:'Barlow',sans-serif;font-size:.75rem;color:var(--mid);
+  padding:.5rem 1rem;background:#f9f9f7;border-top:1px solid var(--border);
+  min-height:1.8rem;
+}
+.mgr-status.ok{color:#2D6A2D;background:#F0FFF0;}
+.mgr-status.err{color:#8B0000;background:#FFF0F0;}
+.mgr-status.busy{color:var(--gold);}
+
+#img-mgr-footer {
+  padding:1.5rem 2.5rem;background:var(--off-white);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+.mgr-footer-note{font-family:'Barlow',sans-serif;font-size:.78rem;color:#888;}
+#mgr-export-btn, #mgr-clear-btn {
+  font-family:'Barlow',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;padding:.7rem 1.5rem;cursor:pointer;border:none;transition:all .25s;
+}
+#mgr-export-btn{background:var(--black);color:#fff;}
+#mgr-export-btn:hover{background:var(--gold);color:var(--black);}
+#mgr-clear-btn{background:transparent;color:#888;border:1px solid var(--border);}
+#mgr-clear-btn:hover{border-color:#c00;color:#c00;}
+
+.mgr-progress{height:3px;background:var(--border);margin:0;}
+.mgr-progress-bar{height:100%;background:var(--gold);width:0;transition:width .3s;}
+
+@media(max-width:1100px){
+  .proj-grid-primary{grid-template-columns:1fr;grid-template-rows:auto;}
+  .proj-card:nth-child(n){grid-column:auto;grid-row:auto;height:500px;}
+  .proj-grid-secondary{grid-template-columns:1fr 1fr;}
+  .stmt-grid{grid-template-columns:1fr;}
+  .pillars-inner{grid-template-columns:1fr;}
+  .pillar{border-right:none;border-bottom:1px solid var(--border);}
+  .pillar:last-child{border-bottom:none;}
+  .metrics-inner{grid-template-columns:1fr 1fr;}
+  .metric{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);}
+  .metric:nth-child(2){border-right:1px solid rgba(255,255,255,.12);}
+  .metric:nth-child(3){border-bottom:none;}
+  .metric:last-child{border-bottom:none;}
+  .spotlight-inner{grid-template-columns:1fr;}
+  .spot-img{min-height:50vw;}
+  .process-steps{grid-template-columns:1fr 1fr;gap:3rem 2rem;}
+  .process-steps::before{display:none;}
+  .contact-inner{grid-template-columns:1fr;}
+  .footer-main{grid-template-columns:1fr 1fr;gap:2rem;}
+  .insights-grid{grid-template-columns:1fr 1fr;}
+  #img-mgr-slots{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  nav{padding:0 1.5rem;}
+  .nav-center{display:none;}
+  .proj-card:nth-child(n){height:340px;}
+  .proj-grid-secondary{grid-template-columns:1fr;}
+  .insights-grid{grid-template-columns:1fr;}
+  .metrics-inner{grid-template-columns:1fr;}
+  .metric{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);}
+  .metric:last-child{border-bottom:none;}
+  .process-steps{grid-template-columns:1fr;gap:2.5rem;}
+  .form-row{grid-template-columns:1fr;}
+  .footer-main{grid-template-columns:1fr;}
+  .awards-inner{flex-direction:column;align-items:flex-start;}
+  .process-header{grid-template-columns:1fr;}
+  .ib-stats{gap:1.5rem;}
+}
+</style>
+</head>
 <body>
 
-  <div class="sub-header">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-8">
-          <ul class="info">
-            <li><i class="fa fa-envelope"></i> contact@elegant.com</li>
-            <li><i class="fa fa-map"></i> Mlimani City, Survey </li>
-          </ul>
-        </div>
-        <div class="col-lg-4 col-md-4">
-          <ul class="social-links">
-            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-            <li><a href="https://x.com/minthu" target="_blank"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-          </ul>
-        </div>
-      </div>
+<header id="header">
+  <nav>
+    <a href="#" class="nav-logo">Elegant<span class="dot">.</span>Designs</a>
+    <ul class="nav-center">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#insights">Insights</a></li>
+      <li><a href="#studio">Studio</a></li>
+      <li><a href="#contact">Careers</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#contact" class="nav-contact">Contact Us</a>
     </div>
-  </div>
+  </nav>
+</header>
 
-  <!-- ***** Header Area Start ***** -->
-  <header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
-                      <img src="uselogo.png" alt="Company Logo" style="width: 200px !important; height: auto !important;">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                      <li><a href="index.html" class="active">Home</a></li>
-                      <li><a href="https://mascani.elegantdesignstz.com/"> Visit Store </a></li>
-                      <li><a href="properties.html"> Preview Designs </a></li>
-                      <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"><i class="fa fa-calendar"></i> START BUILDING </a></li>
-                  </ul>   
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** --> 
-                </nav>
-            </div>
-        </div>
-    </div>
-  </header>
+<section class="hero" id="hero">
   
-  <!-- ***** Header Area End ***** -->
-
-  <div class="main-banner">
-    <div class="owl-carousel owl-banner">
-      <div class="item item-1">
-        <div class="header-text">
-        
-          <h2> We <br> are <br>  builders <br>  of A <br>  Greener <br> And <br> smart <br> World </h2>
-        </div>
-        <br>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform" style="text-decoration: none; display: inline-block; font-size: 24px; font-weight: bold; color: #FFD700; text-transform: uppercase; border: 2px solid #FFD700; border-radius: 30px; padding: 10px 22px; background-color: #000; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); backdrop-filter: blur(5px); transition: all 0.3s ease; animation: zoomIn 1.5s ease-in-out infinite !important;" onmouseover="this.style.backdropFilter='blur(10px)'; this.style.boxShadow='0 6px 15px rgba(0, 0, 0, 0.3)'" onmouseout="this.style.backdropFilter='blur(5px)'; this.style.boxShadow='0 4px 10px rgba(0, 0, 0, 0.2)'">START <em style="color: #FFD700; font-style: normal; font-size: 24px; animation: bounce 1s infinite !important;">BUILDING</em></a><style>@keyframes zoomIn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }} @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); }}</style>
-
+  <div class="intro-slide" id="intro-slide">
+    <div class="intro-bg">
+      <div class="img-slot" id="img-intro-bg" data-label="Intro background — Your signature project photo">
+        <img alt="Elegant Designs">
+        <div class="edit-badge">Change photo</div>
       </div>
-      <div class="item item-2">
-        <div class="header-text">
-        
-          <h2> We <br> breathe design <br> that  guards, inspires <br> and <br> creates </h2>
-        </div>
-        <br>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform" style="text-decoration: none; display: inline-block; font-size: 24px; font-weight: bold; color: #FFD700; text-transform: uppercase; border: 2px solid #FFD700; border-radius: 30px; padding: 10px 22px; background-color: #000; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); backdrop-filter: blur(5px); transition: all 0.3s ease; animation: zoomIn 1.5s ease-in-out infinite !important;" onmouseover="this.style.backdropFilter='blur(10px)'; this.style.boxShadow='0 6px 15px rgba(0, 0, 0, 0.3)'" onmouseout="this.style.backdropFilter='blur(5px)'; this.style.boxShadow='0 4px 10px rgba(0, 0, 0, 0.2)'">START <em style="color: #FFD700; font-style: normal; font-size: 24px; animation: bounce 1s infinite !important;">BUILDING</em></a><style>@keyframes zoomIn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }} @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); }}</style>
-
-      </div>
-      <div class="item item-3">
-        <div class="header-text">
-          
-          <h2>  We <br> design <br>  with <br> purpose and <br> build <br> with <br>  care  <br> </h2> 
-        </div>
-        <br>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform" style="text-decoration: none; display: inline-block; font-size: 24px; font-weight: bold; color: #FFD700; text-transform: uppercase; border: 2px solid #FFD700; border-radius: 30px; padding: 10px 22px; background-color: #000; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); backdrop-filter: blur(5px); transition: all 0.3s ease; animation: zoomIn 1.5s ease-in-out infinite !important;" onmouseover="this.style.backdropFilter='blur(10px)'; this.style.boxShadow='0 6px 15px rgba(0, 0, 0, 0.3)'" onmouseout="this.style.backdropFilter='blur(5px)'; this.style.boxShadow='0 4px 10px rgba(0, 0, 0, 0.2)'">START <em style="color: #FFD700; font-style: normal; font-size: 24px; animation: bounce 1s infinite !important;">BUILDING</em></a><style>@keyframes zoomIn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }} @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); }}</style>
-
+    </div>
+    <div class="intro-content">
+      <div class="intro-inner">
+        <div class="intro-text" id="intro-text"></div>
+        <div class="intro-tagline" id="intro-tagline">Our Work Speaks</div>
       </div>
     </div>
   </div>
 
-  <div class="featured section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="left-image">
-            <img src="m (1).webp" alt="" loading="lazy">
-            <a href="#"><img src="eco1.png" alt="" style="max-width: 60px; padding: 0px;" loading="lazy"></a>
-          </div>
-        </div>
+  <div class="slide active" id="slide-0">
+    <div class="img-slot" id="img-hero-0" data-label="Hero Image 1 — Click 📷 button to upload your photo (1920×1080 recommended)">
+      <img alt="Elegant Designs — Project 1">
+      <div class="edit-badge">Change photo</div>
+    </div>
+  </div>
+  <div class="slide" id="slide-1">
+    <div class="img-slot" id="img-hero-1" data-label="Hero Image 2 — Click 📷 button to upload your photo (1920×1080 recommended)">
+      <img alt="Elegant Designs — Project 2">
+      <div class="edit-badge">Change photo</div>
+    </div>
+  </div>
+  <div class="slide" id="slide-2">
+    <div class="img-slot" id="img-hero-2" data-label="Hero Image 3 — Click 📷 button to upload your photo (1920×1080 recommended)">
+      <img alt="Elegant Designs — Project 3">
+      <div class="edit-badge">Change photo</div>
+    </div>
+  </div>
 
-        <div class="col-lg-5">
-          <div class="section-heading">
-            <h6>| WE ARE MORE THAN ARCHITECTS </h6> <br>
-            <h3> We Leverage digital technology to design eco-friendly buildings that shape a sustainable future</h3>
-          </div>
-          <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  How do we promote environmental sustainability? 
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  Our platform emphasizes <strong> eco-friendly </strong> practices by connecting clients with certified sustainable materials and energy-efficient designs, minimizing waste and reducing the carbon footprint of each project.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  How does our technology improve efficiency in home construction?
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  We leverage  <strong> digital tools </strong> for streamlined project management, real-time tracking, and smart resource allocation, which shortens timelines, reduces manual errors, and increases transparency.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  How we help clients cut costs while building sustainably? 
-                </button>
-              </h2>
-              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  By simplifying <strong> access</strong> to pre-approved eco-friendly materials and pre-fabricated options, we reduce both material and labor costs, helping clients save money without compromising on quality or sustainability.
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="hero-overlay">
+    <div class="hero-inner">
+      <div class="hero-captions">
+        <div class="caption active" id="cap-0">
+          <div class="caption-tag">Ecological Architecture · Dar es Salaam</div>
+          <h1 class="caption-h">The Meridian<br>Tower, <em>2025</em></h1>
+          <p class="caption-sub">320 metres. 85 floors. Net zero. A new landmark for East Africa's skyline — and a new standard for what architecture can be.</p>
+          <a href="#projects" class="caption-btn">View project</a>
         </div>
-        <div class="col-lg-3">
-          <div class="info-table">
-            <ul>
-              <li>
-                <img src="save.png" alt="" style="max-width: 52px;" loading="lazy">
-                <h4> Save Energy <br><span> We help our clients optimize energy use with sustainable materials and smart designs to reduce consumption and lower costs </span></h4>
-              </li>
-              <li>
-                <img src="low-price.png" alt="" style="max-width: 52px;" loading="lazy">
-                <h4> Save Costs <br><span> We help our clients cut costs through efficient planning </span></h4>
-              </li>
-              <li>
-                <img src="track.png" alt="" style="max-width: 52px;" loading="lazy">
-                <h4> Tracking <br><span> We empower our clients to monitor in real time the progress of their construction projects </span></h4>
-              </li>
-
-            </ul>
-          </div>
+        <div class="caption" id="cap-1">
+          <div class="caption-tag">Commercial Campus · Nairobi</div>
+          <h1 class="caption-h">Savanna Office<br><em>Park, 2022</em></h1>
+          <p class="caption-sub">Six towers. Six sky bridges. 12 hectares of net-zero commercial space. The first development of its kind in East Africa.</p>
+          <a href="#projects" class="caption-btn">View project</a>
+        </div>
+        <div class="caption" id="cap-2">
+          <div class="caption-tag">Masterplan · Lagos</div>
+          <h1 class="caption-h">Green Quarter<br><em>Lagos</em></h1>
+          <p class="caption-sub">80 hectares. 12 buildings. West Africa's most ambitious ecological masterplan — where every roof is alive and every structure is net zero.</p>
+          <a href="#projects" class="caption-btn">View project</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="video section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 offset-lg-4">
-          <div class="section-heading text-center">
-            <h6>| Contact Us Today </h6>
-            <h2> Tour our recent developments </h2>
-          </div>
-        </div>
+  <div class="hero-controls">
+    <div class="slide-count"><span id="slide-current">01</span> / 03</div>
+    <div class="slide-dots">
+      <button class="dot-btn active" data-slide="0"></button>
+      <button class="dot-btn" data-slide="1"></button>
+      <button class="dot-btn" data-slide="2"></button>
+    </div>
+    <div class="nav-arrows">
+      <button class="arrow-btn" id="prev-btn">←</button>
+      <button class="arrow-btn" id="next-btn">→</button>
+    </div>
+  </div>
+</section>
+
+<div class="intro-band">
+  <div class="intro-band-inner">
+    <p class="ib-claim">"We design buildings of breathtaking ambition that give more to their environment than they take from it."</p>
+    <div class="ib-stats">
+      <div><span class="ib-stat-v">38</span><span class="ib-stat-l">Projects</span></div>
+      <div><span class="ib-stat-v">4</span><span class="ib-stat-l">Countries</span></div>
+      <div><span class="ib-stat-v">Net 0</span><span class="ib-stat-l">Carbon target</span></div>
+      <div><span class="ib-stat-v">2019</span><span class="ib-stat-l">Est. Dar es Salaam</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="projects-section" id="projects">
+  <div class="projects-header">
+    <div class="rv">
+      <div class="section-eyebrow">Featured Projects</div>
+      <h2 class="section-title">Buildings that<br>define <em>skylines.</em></h2>
+    </div>
+    <a href="#" class="view-all rv">View All Projects</a>
+  </div>
+
+  <div class="proj-grid-primary">
+    <div class="proj-card">
+      <div class="img-slot" id="img-proj-1" data-label="Project 1 photo — Portrait, 800×1100px recommended">
+        <img alt="The Meridian Tower">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Mixed-Use · Dar es Salaam</div>
+        <div class="proj-name">The Meridian Tower</div>
+        <div class="proj-loc">85 Floors · 320m · LEED Platinum · 2025</div>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="img-slot" id="img-proj-2" data-label="Project 2 photo — Landscape, 800×600px recommended">
+        <img alt="Savanna Office Park">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Commercial Campus · Nairobi</div>
+        <div class="proj-name">Savanna Office Park</div>
+        <div class="proj-loc">12 Hectares · 100% Renewable · 2022</div>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="img-slot" id="img-proj-3" data-label="Project 3 photo — Landscape, 800×440px recommended">
+        <img alt="Aso Cultural Dome">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Cultural Hub · Lagos</div>
+        <div class="proj-name">Aso Cultural Dome</div>
+        <div class="proj-loc">Parametric Shell · Rammed Earth · 2024</div>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="img-slot" id="img-proj-4" data-label="Project 4 photo — Landscape, 800×440px recommended">
+        <img alt="Green Quarter Lagos">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Masterplan · Lagos</div>
+        <div class="proj-name">Green Quarter Lagos</div>
+        <div class="proj-loc">80 Hectares · 12 Buildings · 2026</div>
       </div>
     </div>
   </div>
 
-  <div class="video-content">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-10 offset-lg-1">
-          <div class="video-frame">
-            <img src="berna1.webp" alt="" loading="lazy">
-            <a href="https://youtube.com" target="_blank"><i class="fa fa-play"></i></a>
-          </div>
-        </div>
+  <div class="proj-grid-secondary">
+    <div class="proj-card-sm">
+      <div class="img-slot" id="img-proj-5" data-label="Project 5 photo — 600×360px">
+        <img alt="Canopy Stack">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Residential · Nairobi</div>
+        <div class="proj-name">Canopy Stack</div>
+        <div class="proj-loc">Modular · Living Terraces · 2023</div>
+      </div>
+    </div>
+    <div class="proj-card-sm">
+      <div class="img-slot" id="img-proj-6" data-label="Project 6 photo — 600×360px">
+        <img alt="Volta Arts Centre">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Cultural · Accra</div>
+        <div class="proj-name">Volta Arts Centre</div>
+        <div class="proj-loc">Solar Louvers · Bioclimatic · 2023</div>
+      </div>
+    </div>
+    <div class="proj-card-sm">
+      <div class="img-slot" id="img-proj-7" data-label="Project 7 photo — 600×360px">
+        <img alt="Bahari Tower">
+        <div class="edit-badge">Change photo</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+      <div class="proj-info">
+        <div class="proj-type">Residential · Dar es Salaam</div>
+        <div class="proj-name">Bahari Tower</div>
+        <div class="proj-loc">Vertical Garden · Geothermal · 2023</div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="fun-facts">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="wrapper">
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="counter">
-                  <h2 class="timer count-title count-number" data-to="34" data-speed="1000"></h2>
-                   <p class="count-text ">Buildings<br>Finished Now</p>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="counter">
-                  <h2 class="timer count-title count-number" data-to="12" data-speed="1000"></h2>
-                  <p class="count-text ">Years<br>Experience</p>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="counter">
-                  <h2 class="timer count-title count-number" data-to="24" data-speed="1000"></h2>
-                  <p class="count-text ">Awwards<br>Won 2023</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<section class="statement-section" id="approach">
+  <div class="stmt-inner">
+    <div class="stmt-grid rv">
+      <div>
+        <div class="stmt-label">Our Approach</div>
+        <h2 class="stmt-h">Architecture<br>as a force<br>for <em>good.</em></h2>
+      </div>
+      <div>
+        <p class="stmt-body">We are Elegant Designs — a Dar es Salaam practice that refuses to treat sustainability as a constraint. For us, it is the creative brief. Every building we produce demonstrates that ecological architecture can be more ambitious, more beautiful, and more enduring than anything that came before it.</p>
+        <p class="stmt-body">Our 24-person team of architects, engineers, and ecologists takes on 6 to 8 projects per year. We work across East and West Africa because this is where the world's most consequential design decisions are being made right now.</p>
+        <a href="#contact" class="stmt-link">Learn more about us</a>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="section best-deal">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="section-heading">
-            <h6>| Best Deal</h6>
-            <h2>What do you want us to build for you? </h2>
+<div class="pillars">
+  <div class="pillars-inner">
+    <div class="pillar rv"><span class="pillar-num">01</span><h3 class="pillar-title">Climate-First Design</h3><p class="pillar-body">Before a line is drawn, we study the land. Solar path, wind, rainfall, soil — the site is our first design partner. Every building responds to its ecosystem rather than imposing upon it.</p></div>
+    <div class="pillar rv d1"><span class="pillar-num">02</span><h3 class="pillar-title">Buildings That Live</h3><p class="pillar-body">Rooftop gardens, living walls, biodiversity corridors — our structures are ecosystems. An Elegant Designs building actively increases habitat and sequesters carbon over its lifetime.</p></div>
+    <div class="pillar rv d2"><span class="pillar-num">03</span><h3 class="pillar-title">Honest Materials</h3><p class="pillar-body">Rammed earth. Reclaimed steel. Cross-laminated timber. We specify what we mean. Honest materials carry lower embodied carbon — and far more inherent beauty.</p></div>
+  </div>
+</div>
+
+<section class="insights" id="insights">
+  <div class="insights-inner">
+    <div class="insights-header rv">
+      <div><div class="section-eyebrow">Insights & Ideas</div><h2 class="section-title">Thinking about<br>the <em>future.</em></h2></div>
+      <a href="#" class="view-all">View All</a>
+    </div>
+    <div class="insights-grid">
+      <div class="insight-card rv">
+        <div class="insight-img">
+          <div class="img-slot" id="img-insight-1" data-label="Insight 1 image — 560×352px">
+            <img alt="Insight 1"><div class="edit-badge">Change photo</div>
           </div>
         </div>
-        <div class="col-lg-12">
-          <div class="tabs-content">
-            <div class="row">
-              <div class="nav-wrapper ">
-                <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="appartment-tab" data-bs-toggle="tab" data-bs-target="#appartment" type="button" role="tab" aria-controls="appartment" aria-selected="true">Appartment</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="villa-tab" data-bs-toggle="tab" data-bs-target="#villa" type="button" role="tab" aria-controls="villa" aria-selected="false">Villa House</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="penthouse-tab" data-bs-toggle="tab" data-bs-target="#penthouse" type="button" role="tab" aria-controls="penthouse" aria-selected="false"> Office </button>
-                  </li>
-                </ul>
-              </div>              
-              <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="appartment" role="tabpanel" aria-labelledby="appartment-tab">
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <div class="info-table">
-                        <ul>
-                          <li>Total Flat Space <span>185 m2</span></li>
-                          <li>Floor number <span>26th</span></li>
-                          <li>Number of rooms <span>4</span></li>
-                          <li>Parking Available <span>Yes</span></li>
-                          <li>Payment Process <span>Bank</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <img src="appa1.webp" alt="" loading="lazy">
-                    </div>
-                    <div class="col-lg-3">
-                      <h4>Your Dream Apartment, Uniquely Designed </h4>
-                      <p>Let us design an apartment that stands out—crafted with modern architecture, sustainable materials, and tailored to fit your unique vision
-                      <br><br>From personalized layouts that maximize space and natural light to high-quality, eco-friendly finishes, every detail is built for comfort, style, and efficiency.</p>
-                      <div class="icon-button">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"><i class="fa fa-calendar"></i> START BUILDING </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="tab-pane fade" id="villa" role="tabpanel" aria-labelledby="villa-tab">
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <div class="info-table">
-                        <ul>
-                          <li>Total Flat Space <span>250 m2</span></li>
-                          <li>Floor number <span>26th</span></li>
-                          <li>Number of rooms <span>5</span></li>
-                          <li>Parking Available <span>Yes</span></li>
-                          <li>Payment Process <span>Bank</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <img src="appa2.webp" alt="" loading="lazy">
-                    </div>
-                    <div class="col-lg-3">
-                      <h4> Your Bespoke Villa, Crafted for Luxury and Harmony </h4>
-                      <p> Experience the ultimate in luxury with a custom-built villa designed to reflect your style and preferences. <br><br> Our team combines elegant architecture with sustainable materials to create a space that’s both sophisticated and eco-conscious. From expansive layouts that maximize natural light to premium finishes and energy-efficient systems, every detail of your villa is crafted for comfort, beauty, and long-term value.</p>
-                      <div class="icon-button">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"><i class="fa fa-calendar"></i> START PROJECT </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="tab-pane fade" id="penthouse" role="tabpanel" aria-labelledby="penthouse-tab">
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <div class="info-table">
-                        <ul>
-                          <li>Total Flat Space <span>320 m2</span></li>
-                          <li>Floor number <span>34th</span></li>
-                          <li>Number of rooms <span>6</span></li>
-                          <li>Parking Available <span>Yes</span></li>
-                          <li>Payment Process <span>Bank</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <img src="appa3.webp" alt="" loading="lazy">
-                    </div>
-                    <div class="col-lg-3">
-                      <h4> Penthouse Living, Elevated Just for You </h4>
-                      <p> Take your living space to new heights with a penthouse designed just for you. <br><br> We blend stunning views, open layouts, and eco-friendly touches to create a space that’s stylish, comfortable, and uniquely yours. From private terraces to smart, energy-efficient features, every detail is chosen to make your penthouse feel like the ultimate escape above the city.</p>
-                      <div class="icon-button">
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"><i class="fa fa-calendar"></i> START PROJECT </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div class="insight-cat">Sustainability</div>
+        <div class="insight-title">Why Africa's Next Cities Must Be Built Ecologically From the Ground Up</div>
+        <div class="insight-date">April 2025</div>
+      </div>
+      <div class="insight-card rv d1">
+        <div class="insight-img">
+          <div class="img-slot" id="img-insight-2" data-label="Insight 2 image — 560×352px">
+            <img alt="Insight 2"><div class="edit-badge">Change photo</div>
           </div>
         </div>
+        <div class="insight-cat">Research</div>
+        <div class="insight-title">Passive Cooling in Tropical Climates: How We Eliminated Air Conditioning From Our Last Three Projects</div>
+        <div class="insight-date">January 2025</div>
+      </div>
+      <div class="insight-card rv d2">
+        <div class="insight-img">
+          <div class="img-slot" id="img-insight-3" data-label="Insight 3 image — 560×352px">
+            <img alt="Insight 3"><div class="edit-badge">Change photo</div>
+          </div>
+        </div>
+        <div class="insight-cat">Design</div>
+        <div class="insight-title">The Living Facade: How We Integrate 18,000m² of Vertical Garden Across Our Portfolio</div>
+        <div class="insight-date">October 2024</div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="properties section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 offset-lg-4">
-          <div class="section-heading text-center">
-            <h6>| Housing Plans </h6>
-            <h2> It all starts with a great plan, and we've got them all. </h2>
-          </div>
-        </div>
+<section class="metrics">
+  <div class="metrics-inner">
+    <div class="metric rv"><span class="metric-val"><span class="cnt" data-t="62">0</span>%</span><span class="metric-lbl">Average energy reduction</span><span class="metric-sub">vs. conventional construction</span></div>
+    <div class="metric rv d1"><span class="metric-val"><span class="cnt" data-t="38">0</span></span><span class="metric-lbl">Projects completed</span><span class="metric-sub">East & West Africa since 2019</span></div>
+    <div class="metric rv d2"><span class="metric-val"><span class="cnt" data-t="91">0</span>%</span><span class="metric-lbl">Local material sourcing</span><span class="metric-sub">Shorter chains, stronger communities</span></div>
+    <div class="metric rv d3"><span class="metric-val">Net 0</span><span class="metric-lbl">Carbon on every project</span><span class="metric-sub">Our baseline, not our ceiling</span></div>
+  </div>
+</section>
+
+<section class="spotlight" id="studio">
+  <div class="spotlight-inner">
+    <div class="spot-img">
+      <div class="img-slot" id="img-spot" data-label="Studio photo — 720×600px (team, office, or signature project interior)">
+        <img alt="Elegant Designs Studio">
+        <div class="edit-badge">Change photo</div>
       </div>
-      <div class="row">
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="17.jpg" alt="" loading="lazy"></a>
-            <span class="category"> 3 Bedrooms </span>
-            <h6>TZS 90,000 </h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 23</a></h4>
-            <ul>
-              <li>Bedrooms: <span>8</span></li>
-              <li>Bathrooms: <span>8</span></li>
-              <li>Area: <span>545m2</span></li>
-              <li>Floor: <span>3</span></li>
-              <li>Parking: <span>6 spots</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="18.jpg" alt="" loading="lazy"></a>
-            <span class="category"> 4 Bedrooms </span>
-            <h6> TZS 450,000</h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 345 </a></h4>
-            <ul>
-              <li>Bedrooms: <span>6</span></li>
-              <li>Bathrooms: <span>5</span></li>
-              <li>Area: <span>450m2</span></li>
-              <li>Floor: <span>3</span></li>
-              <li>Parking: <span>8 spots</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN  </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="30.jpg" alt="" loading="lazy"></a>
-            <span class="category"> 5 Bedrooms</span>
-            <h6> TZS 900,000</h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 567  </a></h4>
-            <ul>
-              <li>Bedrooms: <span>5</span></li>
-              <li>Bathrooms: <span>4</span></li>
-              <li>Area: <span>225m2</span></li>
-              <li>Floor: <span>3</span></li>
-              <li>Parking: <span>10 spots</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="plan4.webp" alt="" loading="lazy"></a>
-            <span class="category"> 1 Bedroom </span>
-            <h6>TZS 589,000 </h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 567 </a></h4>
-            <ul>
-              <li>Bedrooms: <span>4</span></li>
-              <li>Bathrooms: <span>3</span></li>
-              <li>Area: <span>125m2</span></li>
-              <li>Floor: <span>25th</span></li>
-              <li>Parking: <span>2 cars</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="21.jpg" alt="" loading="lazy"></a>
-            <span class="category"> Shamba House  </span>
-            <h6>TZS 890,000 </h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 234  </a></h4>
-            <ul>
-              <li>Bedrooms: <span>4</span></li>
-              <li>Bathrooms: <span>4</span></li>
-              <li>Area: <span>180m2</span></li>
-              <li>Floor: <span>38th</span></li>
-              <li>Parking: <span>2 cars</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="item">
-            <a href="#"><img src="22.jpg" alt="" loading="lazy"></a>
-            <span class="category"> APPARTMENT </span>
-            <h6>TZS 50,000 </h6>
-            <h4><a href="#"> GREEN CERTIFIED - ID 235 </a></h4>
-            <ul>
-              <li>Bedrooms: <span>3</span></li>
-              <li>Bathrooms: <span>2</span></li>
-              <li>Area: <span>165m2</span></li>
-              <li>Floor: <span>26th</span></li>
-              <li>Parking: <span>3 cars</span></li>
-            </ul>
-            <div class="main-button">
-              <a href="https://docs.google.com/forms/d/e/1FAIpQLSc0onKrwKzIYowduyLLtmmbbiVzld_spdbOiLf-89oq0YeRkQ/viewform"> BUILD WITH THIS PLAN</a>
-            </div>
-          </div>
-        </div>
+      <div class="spot-label">Studio Spotlight</div>
+    </div>
+    <div class="spot-text">
+      <div class="spot-eyebrow">The Studio</div>
+      <h2 class="spot-h">24 people.<br><em>One standard.</em><br>Net zero, always.</h2>
+      <div class="spot-specs">
+        <div><span class="spec-v">2019</span><span class="spec-k">Founded, Dar es Salaam</span></div>
+        <div><span class="spec-v">24</span><span class="spec-k">Professionals</span></div>
+        <div><span class="spec-v">6–8</span><span class="spec-k">Projects per year</span></div>
+        <div><span class="spec-v">4</span><span class="spec-k">Countries active</span></div>
+      </div>
+      <p class="spot-body">We stay small so we stay exceptional. Elegant Designs was founded in 2019 — not to become another architecture firm, but to prove that buildings don't have to choose between ambition and accountability.</p>
+      <a href="#contact" class="spot-btn">Work with us →</a>
+    </div>
+  </div>
+</section>
+
+<section class="process">
+  <div class="process-inner">
+    <div class="process-header rv">
+      <div><div class="section-eyebrow">How We Work</div><h2 class="section-title">Five stages.<br><em>Zero shortcuts.</em></h2></div>
+      <p class="process-intro">Every project follows the same rigorous sequence — from the first site walk to the final planting. We stay on every project, every step. The ecological intent of the design survives contact with reality because we make sure it does.</p>
+    </div>
+    <div class="process-steps">
+      <div class="step rv"><span class="step-num">01</span><h3 class="step-title">Site & Climate Analysis</h3><p class="step-body">We read the land before drawing anything. Solar path, wind, rainfall, soil composition — the site tells us what's possible and responsible.</p></div>
+      <div class="step rv d1"><span class="step-num">02</span><h3 class="step-title">Concept & Carbon Modelling</h3><p class="step-body">Every sketch is tested against a carbon budget from day one. Net zero is the constraint, not an afterthought at planning sign-off.</p></div>
+      <div class="step rv d2"><span class="step-num">03</span><h3 class="step-title">Material Specification</h3><p class="step-body">Local, reclaimed, honest. We refuse any material whose extraction harms more than its use saves. Supply chains transparent by design.</p></div>
+      <div class="step rv d3"><span class="step-num">04</span><h3 class="step-title">Construction</h3><p class="step-body">We stay on site. Our architects build alongside teams, ensuring the ecological intent of the design survives contact with the real world.</p></div>
+      <div class="step rv d4"><span class="step-num">05</span><h3 class="step-title">Post-Occupancy Care</h3><p class="step-body">Reviews at 6 months and 2 years. Energy monitoring, performance tracking, and an ongoing relationship with every building we make.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="awards">
+  <div class="awards-inner">
+    <div class="awards-label">Recognition</div>
+    <div class="awards-div"></div>
+    <div class="awards-list">
+      <span class="award-item">AIA Small Firm Award 2024</span>
+      <span class="award-item">African Architecture Prize — Finalist</span>
+      <span class="award-item">LEED Project of the Year 2023</span>
+      <span class="award-item">Dezeen Sustainable Design Longlist</span>
+      <span class="award-item">UN-Habitat Innovation Award</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="ct-eyebrow rv">Start a Project</div>
+      <h2 class="ct-h rv">Let's build<br>something<br><em>that lasts.</em></h2>
+      <p class="ct-sub rv d1">We take on 6–8 projects per year, chosen with care. If you have a site, a brief, or an idea that won't leave you alone — we want to hear it.</p>
+      <div class="rv d2">
+        <div class="ct-detail-item"><span class="ct-detail-label">Email</span><span class="ct-detail-val">hello@elegantdesigns.com</span></div>
+        <div class="ct-detail-item"><span class="ct-detail-label">Phone</span><span class="ct-detail-val">+255 000 000 000</span></div>
+        <div class="ct-detail-item"><span class="ct-detail-label">Address</span><span class="ct-detail-val">Dar es Salaam, Tanzania</span></div>
+        <div class="ct-detail-item"><span class="ct-detail-label">Offices</span><span class="ct-detail-val">Nairobi · Lagos · Accra</span></div>
+      </div>
+    </div>
+    <form class="form rv d1" onsubmit="handleForm(event)">
+      <div class="form-row">
+        <div class="fg"><label class="fl">First Name</label><input class="fi" type="text" placeholder="Amara"></div>
+        <div class="fg"><label class="fl">Last Name</label><input class="fi" type="text" placeholder="Osei"></div>
+      </div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="amara@company.com"></div>
+      <div class="fg"><label class="fl">Project Type</label>
+        <select class="fsel">
+          <option value="">Select a type</option>
+          <option>High-rise / Tower</option>
+          <option>Commercial Campus</option>
+          <option>Residential</option>
+          <option>Cultural / Public</option>
+          <option>Masterplanning</option>
+          <option>Sustainability Advisory</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Location</label><input class="fi" type="text" placeholder="City, Country"></div>
+      <div class="fg"><label class="fl">About Your Project</label><textarea class="fta" placeholder="What are you building — and why does it matter?"></textarea></div>
+      <button class="fsub" type="submit">Submit Enquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-main">
+    <div>
+      <span class="footer-brand">Elegant<span class="dot">.</span>Designs</span>
+      <p class="footer-tagline">Ecological architecture and construction for Africa's future cities. Est. Dar es Salaam, 2019.</p>
+      <div class="footer-social">
+        <a href="#" class="fsocial">Instagram</a>
+        <a href="#" class="fsocial">LinkedIn</a>
+        <a href="#" class="fsocial">Dezeen</a>
+      </div>
+    </div>
+    <div class="fc"><span class="fc-title">Practice</span><ul><li><a href="#projects">Projects</a></li><li><a href="#approach">Approach</a></li><li><a href="#insights">Insights</a></li><li><a href="#studio">Studio</a></li><li><a href="#">Careers</a></li></ul></div>
+    <div class="fc"><span class="fc-title">Expertise</span><ul><li><a href="#">Architecture</a></li><li><a href="#">Construction</a></li><li><a href="#">Masterplanning</a></li><li><a href="#">Urban Design</a></li><li><a href="#">Sustainability</a></li></ul></div>
+    <div class="fc"><span class="fc-title">Offices</span><ul><li><a href="#">Dar es Salaam</a></li><li><a href="#">Nairobi</a></li><li><a href="#">Lagos</a></li><li><a href="#">Accra</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="fc-copy">© 2025 Elegant Designs. All Rights Reserved.</span>
+    <div class="fc-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">LEED AP · BREEAM · EDGE Certified</a></div>
+  </div>
+</footer>
+
+<button id="img-mgr-btn" onclick="openMgr()">📷 Replace Images</button>
+
+<div id="img-mgr-panel">
+  <div id="img-mgr-inner">
+    <div id="img-mgr-header">
+      <h2>Image Manager — <em>Elegant Designs</em></h2>
+      <button id="img-mgr-close" onclick="closeMgr()">✕</button>
+    </div>
+    <div class="mgr-notice">
+      <strong>How to use:</strong> Click any slot below to upload your own JPEG or PNG photo.
+      Images are automatically <strong>resized</strong> to the correct dimensions and <strong>compressed</strong>
+      to reduce file size without visible quality loss. Your images are saved in your browser
+      and persist on refresh. Use <strong>Export HTML</strong> to download the complete site with your photos embedded.
+    </div>
+    <div class="mgr-progress"><div class="mgr-progress-bar" id="mgr-prog"></div></div>
+    <div id="img-mgr-slots"></div>
+    <div id="img-mgr-footer">
+      <span class="mgr-footer-note" id="mgr-storage-info">Calculating storage…</span>
+      <div style="display:flex;gap:.8rem">
+        <button id="mgr-clear-btn" onclick="clearAllImages()">Clear All Images</button>
+        <button id="mgr-export-btn" onclick="exportHTML()">Export HTML ↓</button>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="contact section">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 offset-lg-4">
-          <div class="section-heading text-center">
-            <h6>| TALK TO US </h6>
-            <h2> Do you need a customized green plan? Reach out </h2>
-          </div>
+<canvas id="proc-canvas" style="display:none"></canvas>
+<input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" style="display:none">
+
+<script>
+const IMAGE_SLOTS = [
+  { id:'intro-bg',  label:'Intro Background',     desc:'Opening screen behind text',        w:1920, h:1080, maxKB:350 },
+  { id:'hero-0',    label:'Hero Slide 1',         desc:'Full-bleed hero background',        w:1920, h:1080, maxKB:350 },
+  { id:'hero-1',    label:'Hero Slide 2',         desc:'Full-bleed hero background',        w:1920, h:1080, maxKB:350 },
+  { id:'hero-2',    label:'Hero Slide 3',         desc:'Full-bleed hero background',        w:1920, h:1080, maxKB:350 },
+  { id:'proj-1',    label:'Project 1 (large)',    desc:'Main feature, portrait',            w:800,  h:1100, maxKB:250 },
+  { id:'proj-2',    label:'Project 2 (top-right)',desc:'Primary grid, landscape',           w:800,  h:600,  maxKB:200 },
+  { id:'proj-3',    label:'Project 3 (btm-left)', desc:'Primary grid, landscape',           w:800,  h:440,  maxKB:180 },
+  { id:'proj-4',    label:'Project 4 (btm-right)',desc:'Primary grid, landscape',           w:800,  h:440,  maxKB:180 },
+  { id:'proj-5',    label:'Project 5',            desc:'Secondary row',                     w:600,  h:360,  maxKB:150 },
+  { id:'proj-6',    label:'Project 6',            desc:'Secondary row',                     w:600,  h:360,  maxKB:150 },
+  { id:'proj-7',    label:'Project 7',            desc:'Secondary row',                     w:600,  h:360,  maxKB:150 },
+  { id:'spot',      label:'Studio Photo',         desc:'Spotlight panel',                   w:720,  h:600,  maxKB:200 },
+  { id:'insight-1', label:'Insight 1 Image',     desc:'Blog/insight card',                 w:560,  h:352,  maxKB:130 },
+  { id:'insight-2', label:'Insight 2 Image',     desc:'Blog/insight card',                 w:560,  h:352,  maxKB:130 },
+  { id:'insight-3', label:'Insight 3 Image',     desc:'Blog/insight card',                 w:560,  h:352,  maxKB:130 },
+];
+
+const canvas    = document.getElementById('proc-canvas');
+const ctx       = canvas.getContext('2d');
+const fileInput = document.getElementById('file-input');
+let activeSlotId = null;
+
+const storeKey = id => 'ed_img_' + id;
+const fmtKB = bytes => bytes < 1024*100
+  ? (bytes/1024).toFixed(1) + ' KB'
+  : (bytes/1024/1024).toFixed(2) + ' MB';
+
+async function compressImage(file, targetW, targetH, maxKB) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const srcRatio = img.width / img.height;
+        const dstRatio = targetW  / targetH;
+        let sx, sy, sw, sh;
+        if (srcRatio > dstRatio) {
+          sh = img.height;
+          sw = Math.round(img.height * dstRatio);
+          sy = 0;
+          sx = Math.round((img.width - sw) / 2);
+        } else {
+          sw = img.width;
+          sh = Math.round(img.width / dstRatio);
+          sx = 0;
+          sy = Math.round((img.height - sh) / 2);
+        }
+        canvas.width  = targetW;
+        canvas.height = targetH;
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetW, targetH);
+        const maxBytes = maxKB * 1024;
+        let quality = 0.88;
+        let dataURL, attempt = 0;
+        do {
+          dataURL = canvas.toDataURL('image/jpeg', quality);
+          const byteLen = Math.round((dataURL.length - 22) * 3 / 4);
+          if (byteLen <= maxBytes || quality <= 0.4) break;
+          quality -= 0.06;
+          attempt++;
+        } while (attempt < 10);
+        resolve(dataURL);
+      };
+      img.onerror = () => reject(new Error('Could not load image'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('Could not read file'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function applyImageToSlot(id, dataURL) {
+  const slot = document.getElementById('img-' + id);
+  if (!slot) return;
+  const imgEl = slot.querySelector('img');
+  if (!imgEl) return;
+  imgEl.src = dataURL;
+  imgEl.classList.add('loaded');
+  slot.classList.add('has-image');
+}
+
+function saveImage(id, dataURL) {
+  try {
+    localStorage.setItem(storeKey(id), dataURL);
+  } catch(e) {
+    console.warn('localStorage full — image not persisted:', id);
+  }
+}
+
+function loadStoredImages() {
+  IMAGE_SLOTS.forEach(slot => {
+    const data = localStorage.getItem(storeKey(slot.id));
+    if (data) applyImageToSlot(slot.id, data);
+  });
+}
+
+async function handleFileSelected(file, slotId) {
+  const slot    = IMAGE_SLOTS.find(s => s.id === slotId);
+  if (!slot) return;
+  const mgrSlot = document.getElementById('mgr-slot-' + slotId);
+  const status  = mgrSlot ? mgrSlot.querySelector('.mgr-status') : null;
+  const prog    = document.getElementById('mgr-prog');
+  const origSize = file.size;
+  if (status) { status.className = 'mgr-status busy'; status.textContent = '⏳ Resizing & compressing…'; }
+  if (prog) prog.style.width = '30%';
+  try {
+    const dataURL   = await compressImage(file, slot.w, slot.h, slot.maxKB);
+    const finalSize = Math.round((dataURL.length - 22) * 3 / 4);
+    if (prog) prog.style.width = '80%';
+    applyImageToSlot(slotId, dataURL);
+    saveImage(slotId, dataURL);
+    if (prog) setTimeout(() => { prog.style.width = '0'; }, 800);
+    if (mgrSlot) {
+      const previewImg  = mgrSlot.querySelector('.mgr-slot-preview img');
+      const placeholder = mgrSlot.querySelector('.mgr-placeholder');
+      if (previewImg)  { previewImg.src = dataURL; previewImg.classList.add('loaded'); }
+      if (placeholder)   placeholder.style.display = 'none';
+      const sizeEl = mgrSlot.querySelector('.mgr-slot-size');
+      if (sizeEl) {
+        const saved = Math.round((1 - finalSize / origSize) * 100);
+        sizeEl.textContent = `${fmtKB(origSize)} → ${fmtKB(finalSize)}${saved > 0 ? ' (' + saved + '% saved)' : ''}`;
+      }
+      if (status) { status.className = 'mgr-status ok'; status.textContent = `✓ Uploaded & optimised (${slot.w}×${slot.h}px, ${fmtKB(finalSize)})`; }
+    }
+    updateStorageInfo();
+  } catch(err) {
+    if (prog) prog.style.width = '0';
+    if (status) { status.className = 'mgr-status err'; status.textContent = '✕ Error: ' + err.message; }
+  }
+}
+
+function openMgr()  { document.getElementById('img-mgr-panel').classList.add('open');    buildMgrSlots(); updateStorageInfo(); }
+function closeMgr() { document.getElementById('img-mgr-panel').classList.remove('open'); }
+
+function buildMgrSlots() {
+  const container = document.getElementById('img-mgr-slots');
+  if (container.dataset.built) return;
+  container.dataset.built = '1';
+  container.innerHTML = '';
+  IMAGE_SLOTS.forEach(slot => {
+    const stored = localStorage.getItem(storeKey(slot.id));
+    const div = document.createElement('div');
+    div.className = 'mgr-slot';
+    div.id = 'mgr-slot-' + slot.id;
+    div.onclick = () => triggerUpload(slot.id);
+    div.innerHTML = `
+      <div class="mgr-slot-preview">
+        <img src="${stored || ''}" alt="" class="${stored ? 'loaded' : ''}" style="${stored ? '' : 'display:none'}">
+        <div class="mgr-placeholder" style="${stored ? 'display:none' : ''}">
+          <span class="mgr-placeholder-icon">📷</span>
+          <span class="mgr-placeholder-text">Click to upload</span>
         </div>
+        <div class="mgr-upload-overlay"><span>Upload Photo</span><span style="font-size:.65rem;opacity:.8">${slot.w}×${slot.h}px</span></div>
       </div>
-    </div>
-  </div>
-
-  <div class="contact-content">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-7">
-          <div id="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d20371.134126663666!2d39.2118002589409!3d-6.783353771378768!3m2!1i1024!2i768!4f13.1!4m1!3e6!5e0!3m2!1sen!2stz!4v1730299004952!5m2!1sen!2stz" width="100%" height="500px" frameborder="0" style="border:0; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);" allowfullscreen=""></iframe>
-          </div>
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="item phone">
-                <img src="phone-icon.png" alt="" style="max-width: 52px;" loading="lazy">
-                <h6> +255 745 749 973 <br><span>Phone Number</span></h6>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="item email">
-                <img src="email-icon.png" alt="" style="max-width: 52px;" loading="lazy">
-                <h6>hq@elegant.com<br><span>Business Email</span></h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <form id="contact-form" action="" method="post">
-            <div class="row">
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="name">Full Name</label>
-                  <input type="name" name="name" id="name" placeholder="Your Name..." autocomplete="on" required>
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="email">Email Address</label>
-                  <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your E-mail..." required="">
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="subject">Subject</label>
-                  <input type="subject" name="subject" id="subject" placeholder="Subject..." autocomplete="on" >
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="message">Message</label>
-                  <textarea name="message" id="message" placeholder="Your Message"></textarea>
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <button type="submit" id="form-submit" class="orange-button">Send Message</button>
-                </fieldset>
-              </div>
-            </div>
-          </form>
-        </div>
+      <div class="mgr-slot-info">
+        <div class="mgr-slot-name">${slot.label}</div>
+        <div class="mgr-slot-desc">${slot.desc} · max ${slot.maxKB}KB</div>
+        <div class="mgr-slot-size">${stored ? 'Image loaded from storage' : 'No image yet'}</div>
       </div>
-    </div>
-  </div>
+      <div class="mgr-status ${stored ? 'ok' : ''}">${stored ? '✓ Image stored in browser' : 'Ready — click to upload JPEG or PNG'}</div>
+    `;
+    container.appendChild(div);
+  });
+}
 
-  <footer>
-    <div class="container">
-      <div class="col-lg-8">
-        <p>                      Copyright © Elegant Designs & Construction Company Ltd. All rights reserved. 
-      </div>
-    </div>
-  </footer>
+function triggerUpload(slotId) {
+  activeSlotId = slotId;
+  fileInput.value = '';
+  fileInput.click();
+}
 
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
-  <script src="https://kit.fontawesome.com/41a395c55c.js" crossorigin="anonymous" defer></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-  <script src="bootstrap.min.js" defer></script>
-  <script src="isotope.min.js" defer></script>
-  <script src="owl-carousel.js" defer></script>
-  <script src="counter.js" defer></script>
-  <script src="custom.js" defer></script>
-  
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file && activeSlotId) handleFileSelected(file, activeSlotId);
+});
 
-  </body>
+function updateStorageInfo() {
+  let total = 0;
+  IMAGE_SLOTS.forEach(s => {
+    const d = localStorage.getItem(storeKey(s.id));
+    if (d) total += d.length * 2;
+  });
+  const used = IMAGE_SLOTS.filter(s => localStorage.getItem(storeKey(s.id))).length;
+  const el = document.getElementById('mgr-storage-info');
+  if (el) el.textContent = `${used} of ${IMAGE_SLOTS.length} images uploaded · ~${fmtKB(total)} stored`;
+}
+
+function clearAllImages() {
+  if (!confirm('Remove all uploaded images? This cannot be undone.')) return;
+  IMAGE_SLOTS.forEach(s => localStorage.removeItem(storeKey(s.id)));
+  IMAGE_SLOTS.forEach(s => {
+    const slot = document.getElementById('img-' + s.id);
+    if (!slot) return;
+    const img = slot.querySelector('img');
+    if (img) { img.src = ''; img.classList.remove('loaded'); }
+    slot.classList.remove('has-image');
+  });
+  const container = document.getElementById('img-mgr-slots');
+  delete container.dataset.built;
+  buildMgrSlots();
+  updateStorageInfo();
+}
+
+function exportHTML() {
+  const btn = document.getElementById('mgr-export-btn');
+  btn.textContent = 'Preparing…'; btn.disabled = true;
+  setTimeout(() => {
+    let html = document.documentElement.outerHTML;
+    IMAGE_SLOTS.forEach(s => {
+      const data = localStorage.getItem(storeKey(s.id));
+      if (!data) return;
+      const regex = new RegExp(`(id="img-${s.id}"[\\s\\S]*?<img)([^>]*?)>`, 'g');
+      html = html.replace(regex, (match, before, attrs) => {
+        if (attrs.includes('src=')) {
+          attrs = attrs.replace(/src="[^"]*"/, `src="${data}"`);
+        } else {
+          attrs += ` src="${data}"`;
+        }
+        if (!attrs.includes('class=')) {
+          attrs += ' class="loaded"';
+        } else {
+          attrs = attrs.replace(/class="([^"]*)"/, (m, c) => `class="${c} loaded"`);
+        }
+        return `${before}${attrs}>`;
+      });
+    });
+    IMAGE_SLOTS.forEach(s => {
+      if (!localStorage.getItem(storeKey(s.id))) return;
+      html = html.replace(
+        new RegExp(`class="img-slot"([^>]*)id="img-${s.id}"`, 'g'),
+        `class="img-slot has-image"$1id="img-${s.id}"`
+      );
+    });
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'elegant-designs-website.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    btn.textContent = 'Export HTML ↓'; btn.disabled = false;
+  }, 100);
+}
+
+/* ── INTRO SEQUENCE ── */
+function runIntroSequence() {
+  const introSlide = document.getElementById('intro-slide');
+  const introText  = document.getElementById('intro-text');
+  const tagline    = document.getElementById('intro-tagline');
+  const words = ['Building', 'Africa\'s', '<em>future.</em>'];
+  let wordIndex = 0;
+
+  const typeNextWord = () => {
+    if (wordIndex < words.length) {
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.innerHTML = words[wordIndex];
+      span.style.animationDelay = (wordIndex * 0.15) + 's';
+      if (wordIndex > 0) introText.innerHTML += ' ';
+      introText.appendChild(span);
+      wordIndex++;
+      setTimeout(typeNextWord, 150);
+    } else {
+      setTimeout(() => { tagline.classList.add('visible'); }, 400);
+    }
+  };
+
+  setTimeout(() => { introText.classList.add('visible'); typeNextWord(); }, 300);
+  setTimeout(() => {
+    introSlide.classList.add('fade-out');
+    setTimeout(() => { introSlide.style.display = 'none'; startAuto(); }, 800);
+  }, 4000);
+}
+
+/* ── SLIDESHOW ── */
+let current = 0;
+const slides   = document.querySelectorAll('.slide');
+const captions = document.querySelectorAll('.caption');
+const dotBtns  = document.querySelectorAll('.dot-btn');
+const counter  = document.getElementById('slide-current');
+let autoTimer;
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  captions[current].classList.remove('active');
+  dotBtns[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  captions[current].classList.add('active');
+  dotBtns[current].classList.add('active');
+  counter.textContent = String(current + 1).padStart(2, '0');
+}
+function startAuto() { autoTimer = setInterval(() => goTo(current + 1), 6000); }
+function resetAuto() { clearInterval(autoTimer); startAuto(); }
+
+document.getElementById('next-btn').onclick = () => { goTo(current + 1); resetAuto(); };
+document.getElementById('prev-btn').onclick = () => { goTo(current - 1); resetAuto(); };
+dotBtns.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.slide); resetAuto(); }));
+
+/* ── NAV ── */
+const hdr = document.getElementById('header');
+window.addEventListener('scroll', () => hdr.classList.toggle('solid', scrollY > 80));
+
+/* ── SCROLL REVEAL (FIXED) ── */
+const rvEls = document.querySelectorAll('.rv');
+rvEls.forEach(el => {
+  new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: .12, rootMargin: '0px 0px -40px 0px' }).observe(el);
+});
+
+/* ── COUNT-UP ── */
+document.querySelectorAll('.cnt[data-t]').forEach(el => {
+  new IntersectionObserver(([e], obs) => {
+    if (!e.isIntersecting) return;
+    const t = +el.dataset.t;
+    let s = null;
+    const step = ts => {
+      if (!s) s = ts;
+      const p = Math.min((ts - s) / 2000, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(ease * t);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = t;
+    };
+    requestAnimationFrame(step);
+    obs.unobserve(el);
+  }, { threshold: .5 }).observe(el);
+});
+
+/* ── FORM ── */
+function handleForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.fsub');
+  btn.textContent = 'Submitting…'; btn.style.opacity = '.6';
+  setTimeout(() => {
+    btn.textContent = 'Enquiry Received ✓';
+    btn.style.background = '#1A3A22';
+    btn.style.color = '#fff';
+    btn.style.opacity = '1';
+  }, 1200);
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  loadStoredImages();
+  document.querySelectorAll('.img-slot img').forEach(img => {
+    if (img.complete && img.naturalWidth > 0) img.classList.add('loaded');
+    img.addEventListener('load', () => img.classList.add('loaded'));
+  });
+  runIntroSequence();
+});
+</script>
+</body>
 </html>
